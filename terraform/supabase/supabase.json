@@ -10735,7 +10735,7 @@
                 }
             }
         },
-        "SupabasAnonKey": {
+        "SupabaseAnonKey": {
             "Description": "This key is safe to use in a browser if you have enabled Row Level Security for your tables and configured policies.",
             "Value": {
                 "Fn::GetAtt": [
@@ -10752,6 +10752,88 @@
                                 "Ref": "AWS::StackName"
                             },
                             "AnonKey"
+                        ]
+                    ]
+                }
+            }
+        },
+        "VpcId": {
+            "Description": "The VPC ID for the Supabase stack.",
+            "Value": {
+                "Ref": "VPCB9E5F0B4"
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            "VPC"
+                        ]
+                    ]
+                }
+            }
+        },
+        "ClusterArn": {
+            "Description": "The ECS cluster ARN for the Supabase stack.",
+            "Value": {
+                "Fn::GetAtt": [
+                    "ClusterEB0386A7",
+                    "Arn"
+                ]
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            "Cluster"
+                        ]
+                    ]
+                }
+            }
+        },
+        "ClusterSecurityGroup": {
+            "Description": "The security group ID for the ECS cluster.",
+            "Value": {
+                "Fn::GetAtt": [
+                    "DatabaseClusterSecurityGroupFEF1426A",
+                    "GroupId"
+                ]
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            "ClusterSecurityGroup"
+                        ]
+                    ]
+                }
+            }
+        },
+        "ClusterSupabaseAdminSecret" : {
+            "Description": "The secret ARN for the ECS cluster.",
+            "Value": {
+                "Ref": "SupabaseDatabaseClusterSecret2AA4A5CD3fdaad7efa858a3daf9490cf0a702aeb"
+            },
+            "Export": {
+                "Name": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            {
+                                "Ref": "AWS::StackName"
+                            },
+                            "ClusterSupabaseAdminSecret"
                         ]
                     ]
                 }

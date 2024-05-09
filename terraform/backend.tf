@@ -23,9 +23,7 @@ terraform {
     hostname     = "app.terraform.io"
     organization = "gamcap-labs"
     workspaces {
-      prefix = "worldcoin-"
+      prefix = "atlas-"
     }
   }
-
 }
-
