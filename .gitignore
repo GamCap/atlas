@@ -1,2 +1,4 @@
 .ponder
 .terraform
+*.tfvars
+*.tfbackend

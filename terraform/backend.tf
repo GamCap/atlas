@@ -19,11 +19,6 @@ terraform {
     }
   }
 
-  backend "remote" {
-    hostname     = var.backend_hostname
-    organization = var.organization
-    workspaces {
-      prefix = var.workspace_prefix
-    }
-  }
+  backend "remote" {}
 }
+

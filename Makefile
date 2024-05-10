@@ -2,17 +2,17 @@
 
 # TERRAFORM commands 
 terraform_init: 
-	terraform -chdir=terraform init
+	cd terraform && terraform init -backend-config=config.remote.tfbackend
 
-terraform_staging:
-	@echo "Running terraform commands for staging..."
-	terraform -chdir=terraform workspace select staging
-	terraform -chdir=terraform apply -var-file="vars/staging.tfvars"
+# terraform_staging:
+# 	@echo "Running terraform commands for staging..."
+# 	cd terraform && terraform workspace select staging
+# 	cd terraform && terraform apply
 
 terraform_prod:
 	@echo "Running terraform commands for staging..."
-	terraform -chdir=terraform workspace select prod
-	terraform -chdir=terraform apply -var-file="vars/prod.tfvars"
+	cd terraform && terraform workspace select prod
+	cd terraform && terraform apply
 
 
 #DBT commands
