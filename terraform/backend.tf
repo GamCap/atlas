@@ -20,10 +20,10 @@ terraform {
   }
 
   backend "remote" {
-    hostname     = "app.terraform.io"
-    organization = "gamcap-labs"
+    hostname     = var.backend_hostname
+    organization = var.organization
     workspaces {
-      prefix = "atlas-"
+      prefix = var.workspace_prefix
     }
   }
 }
