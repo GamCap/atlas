@@ -33,6 +33,9 @@ module "ecs_service" {
     type = "ECS"
   }
 
+  cpu    = 4096
+  memory = 16384
+
   task_exec_iam_statements = [
     {
       effect    = "Allow"
@@ -54,8 +57,8 @@ module "ecs_service" {
 
   container_definitions = {
     indexer = {
-      cpu       = 512
-      memory    = 2048
+      cpu       = 4096
+      memory    = 16384
       essential = true
       image     = aws_ecr_repository.ecr.repository_url
       healthCheck = {
@@ -71,7 +74,7 @@ module "ecs_service" {
       cloudwatch_log_group_retention_in_days = 7
 
       readonly_root_filesystem = false
-      
+
       log_configuration = {
         logDriver = "awslogs"
       }
