@@ -1,4 +1,4 @@
-name: Docker
+name: Ponder to GitHub Container Registry
 
 on:
   push:
