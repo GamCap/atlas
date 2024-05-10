@@ -44,6 +44,11 @@ resource "aws_cloudformation_stack" "supabase" {
   timeout_in_minutes = 0
   disable_rollback   = false
   capabilities       = ["CAPABILITY_NAMED_IAM", "CAPABILITY_AUTO_EXPAND"]
+
+  # This is a workaround
+  lifecycle {
+    ignore_changes = all
+  }
 }
 
 resource "aws_s3_bucket" "supabase" {
