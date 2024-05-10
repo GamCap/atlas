@@ -4,11 +4,11 @@ variable "backend_hostname" {
 }
 
 variable "organization" {
-  type    = string
+  type = string
 }
 
 variable "workspace_prefix" {
-  type    = string
+  type = string
 }
 
 variable "region" {

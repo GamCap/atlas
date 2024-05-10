@@ -1,5 +1,5 @@
 locals {
-    app_name = "atlas"
+  app_name = "atlas"
 }
 
 module "tags" {
@@ -10,13 +10,13 @@ module "tags" {
 }
 
 module "supabase" {
-  source = "./supabase"
+  source   = "./supabase"
   app_name = local.app_name
 }
 
 resource "aws_security_group" "ponder" {
 
-  name = "ponder"
+  name   = "ponder"
   vpc_id = module.supabase.vpc_id
 
   egress {
@@ -46,7 +46,7 @@ resource "aws_vpc_security_group_ingress_rule" "ponder" {
 module "ponder" {
   source = "./ponder"
 
-  app_name = local.app_name
-  vpc_id   = module.supabase.vpc_id
+  app_name          = local.app_name
+  vpc_id            = module.supabase.vpc_id
   security_group_id = aws_security_group.ponder.id
 }

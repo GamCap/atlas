@@ -1,7 +1,7 @@
 provider "aws" {
-    region  = var.region
+  region = var.region
 
-    default_tags {
-        tags = module.tags.tags
-    }
+  default_tags {
+    tags = module.tags.tags
+  }
 }

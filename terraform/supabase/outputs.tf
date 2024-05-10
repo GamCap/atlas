@@ -23,7 +23,7 @@ output "supabase_url" {
 
 output "vpc_id" {
   value       = aws_cloudformation_stack.supabase.outputs["VpcId"]
-  description = "VPC ID for the Supabase stack." 
+  description = "VPC ID for the Supabase stack."
 }
 
 output "cluster_supabase_admin_secret" {

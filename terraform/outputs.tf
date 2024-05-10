@@ -1,6 +1,6 @@
 output "secret_string" {
   sensitive = true
-  value = data.aws_secretsmanager_secret_version.cluster_supabase_admin_secret.secret_string
+  value     = data.aws_secretsmanager_secret_version.cluster_supabase_admin_secret.secret_string
 }
 
 output "supabase_url" {
