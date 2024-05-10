@@ -4,6 +4,10 @@ import { OptimismMintableERC20 } from "./abis/OptimismMintableERC20";
 import { WLDERC20 } from "./abis/WLDERC20";
 
 export default createConfig({
+  database: {
+    kind: "postgres",
+    schema: "ponder_prod",
+  },
   networks: {
     mainnet: {
       chainId: 1,
