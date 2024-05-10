@@ -28,7 +28,7 @@ jobs:
       - name: Build, tag, and push image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ponder
+          ECR_REPOSITORY: atlas-ponder
         working-directory: ./ponder
         run: |
           SHORT_SHA=$(git rev-parse --short ${GITHUB_SHA})
