@@ -77,33 +77,3 @@ ponder.on("WLD_Optimism:Transfer", async ({ event, context }) => {
     },
   });
 });
-
-// ponder.on("ERC20:Approval", async ({ event, context }) => {
-//   const { Allowance, ApprovalEvent } = context.db;
-
-//   const allowanceId = `${event.args.owner}-${event.args.spender}`;
-
-//   // Create or update the Allowance.
-//   await Allowance.upsert({
-//     id: allowanceId,
-//     create: {
-//       ownerId: event.args.owner,
-//       spenderId: event.args.spender,
-//       amount: event.args.value,
-//     },
-//     update: {
-//       amount: event.args.value,
-//     },
-//   });
-
-//   // Create an ApprovalEvent.
-//   await ApprovalEvent.create({
-//     id: event.log.id,
-//     data: {
-//       ownerId: event.args.owner,
-//       spenderId: event.args.spender,
-//       amount: event.args.value,
-//       timestamp: Number(event.block.timestamp),
-//     },
-//   });
-// });
