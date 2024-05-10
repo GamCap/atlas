@@ -28,10 +28,10 @@ data "aws_subnets" "supabase_public" {
   }
 }
 
-data "aws_secretsmanager_secret" "cluster_supabase_admin_secret" {
-  arn = module.supabase.cluster_supabase_admin_secret
+data "aws_secretsmanager_secret" "cluster_postgres_secret" {
+  arn = module.supabase.cluster_postgres_secret
 }
 
-data "aws_secretsmanager_secret_version" "cluster_supabase_admin_secret" {
-  secret_id = data.aws_secretsmanager_secret.cluster_supabase_admin_secret.id
+data "aws_secretsmanager_secret_version" "cluster_postgres_secret" {
+  secret_id = data.aws_secretsmanager_secret.cluster_postgres_secret.id
 }

@@ -36,8 +36,8 @@ resource "aws_security_group" "ponder" {
 
 resource "aws_vpc_security_group_ingress_rule" "ponder" {
   description                  = "EC2 instance security group ingress rule from Supabase database migration function security group"
-  from_port                    = jsondecode(data.aws_secretsmanager_secret_version.cluster_supabase_admin_secret.secret_string)["port"]
-  to_port                      = jsondecode(data.aws_secretsmanager_secret_version.cluster_supabase_admin_secret.secret_string)["port"]
+  from_port                    = jsondecode(data.aws_secretsmanager_secret_version.cluster_postgres_secret.secret_string)["port"]
+  to_port                      = jsondecode(data.aws_secretsmanager_secret_version.cluster_postgres_secret.secret_string)["port"]
   referenced_security_group_id = aws_security_group.ponder.id
   ip_protocol                  = "tcp"
   security_group_id            = module.supabase.cluster_security_group
@@ -46,7 +46,10 @@ resource "aws_vpc_security_group_ingress_rule" "ponder" {
 module "ponder" {
   source = "./ponder"
 
-  app_name          = local.app_name
-  vpc_id            = module.supabase.vpc_id
-  security_group_id = aws_security_group.ponder.id
+  app_name           = local.app_name
+  vpc_id             = module.supabase.vpc_id
+  security_group_id  = aws_security_group.ponder.id
+  private_subnet_ids  = data.aws_subnets.supabase_private.ids
+  region             = var.region
+  postgres_secret_id = data.aws_secretsmanager_secret.cluster_postgres_secret.id
 }

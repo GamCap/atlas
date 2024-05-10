@@ -26,8 +26,8 @@ output "vpc_id" {
   description = "VPC ID for the Supabase stack."
 }
 
-output "cluster_supabase_admin_secret" {
-  value       = aws_cloudformation_stack.supabase.outputs["ClusterSupabaseAdminSecret"]
+output "cluster_postgres_secret" {
+  value       = aws_cloudformation_stack.supabase.outputs["ClusterPostgresSecret"]
   description = "Admin secret for the Supabase cluster."
 }
 

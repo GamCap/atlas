@@ -16,3 +16,18 @@ variable "security_group_id" {
   description = "The ID of the security group"
   type        = string
 }
+
+variable "region" {
+  type    = string
+  default = "us-east-1"
+}
+
+variable "private_subnet_ids" {
+  description = "The IDs of the private subnets"
+  type        = list(string)
+}
+
+variable "postgres_secret_id" {
+  description = "The secret for the Postgres database"
+  type        = string
+}

@@ -10,7 +10,7 @@ terraform_init:
 # 	cd terraform && terraform apply
 
 terraform_prod:
-	@echo "Running terraform commands for staging..."
+	@echo "Running terraform commands for prod..."
 	cd terraform && terraform workspace select prod
 	cd terraform && terraform apply
 

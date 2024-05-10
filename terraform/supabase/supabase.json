@@ -10820,10 +10820,10 @@
                 }
             }
         },
-        "ClusterSupabaseAdminSecret" : {
+        "ClusterPostgresSecret" : {
             "Description": "The secret ARN for the ECS cluster.",
             "Value": {
-                "Ref": "SupabaseDatabaseClusterSecret2AA4A5CD3fdaad7efa858a3daf9490cf0a702aeb"
+                "Ref": "DatabasepostgresSecret8E64AF98"
             },
             "Export": {
                 "Name": {
@@ -10833,7 +10833,7 @@
                             {
                                 "Ref": "AWS::StackName"
                             },
-                            "ClusterSupabaseAdminSecret"
+                            "ClusterPostgresSecret"
                         ]
                     ]
                 }
