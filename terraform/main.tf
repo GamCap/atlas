@@ -44,17 +44,9 @@ resource "aws_vpc_security_group_ingress_rule" "ponder" {
 }
 
 module "ponder" {
-  source  = "terraform-aws-modules/ec2-instance/aws"
-  version = "5.6.1"
+  source = "./ponder"
 
-  name = "ponder"
-
-  instance_type = "t3.medium"
-
-  ami = "ami-07caf09b362be10b8"
-
-  key_name = "ponder"
-
-  vpc_security_group_ids = [aws_security_group.ponder.id]
-  subnet_id = data.aws_subnets.supabase_public.ids[0]
+  app_name = local.app_name
+  vpc_id   = module.supabase.vpc_id
+  security_group_id = aws_security_group.ponder.id
 }
