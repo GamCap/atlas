@@ -16,5 +16,8 @@ COPY . .
 # Expose the environment variable MODE to select between indexer and server
 ENV MODE=indexer
 
+# Set the default port for the application to listen on
+EXPOSE 3000
+
 # Use a script to decide what command to run based on the MODE environment variable
 CMD if [ "$MODE" = "server" ]; then npm run serve; else npm run start; fi
