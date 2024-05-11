@@ -26,7 +26,7 @@ export default createConfig({
       abi: OptimismMintableERC20,
       address: "0xdC6fF44d5d932Cbd77B52E5612Ba0529DC6226F1",
       startBlock: 107087966,
-      endBlock: 109500000,
+      endBlock: 109400000,
       filter: {
         event: "Transfer"
       }
