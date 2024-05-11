@@ -33,8 +33,8 @@ module "ecs_service" {
     type = "ECS"
   }
 
-  cpu    = 4096
-  memory = 16384
+  cpu    = 8192
+  memory = 32768
 
   task_exec_iam_statements = [
     {
