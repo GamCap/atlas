@@ -81,6 +81,10 @@ module "ecs_service" {
       network_mode = "awsvpc"
       environment = [
         {
+          name  = "NODE_OPTIONS"
+          value = "--max-old-space-size=16384"
+        },
+        {
           name  = "MODE"
           value = "indexer"
         },
