@@ -57,8 +57,8 @@ module "ecs_service" {
 
   container_definitions = {
     indexer = {
-      cpu       = 4096
-      memory    = 16384
+      cpu       = 8192
+      memory    = 32768
       essential = true
       image     = aws_ecr_repository.ecr.repository_url
       healthCheck = {
