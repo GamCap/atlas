@@ -6,6 +6,9 @@ import { WLDERC20 } from "./abis/WLDERC20";
 export default createConfig({
   database: {
     kind: "postgres",
+    poolConfig: {
+      max: 300
+    },
     schema: "ponder_prod",
   },
   networks: {
