@@ -11,7 +11,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@ponder/core": "^0.4.26",
+    "@ponder/core": "github:ponder-sh/ponder#907",
     "viem": "^1.19.9"
   },
   "devDependencies": {
