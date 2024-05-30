@@ -11,7 +11,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@ponder/core": "file:./ponder_dist",
+    "@ponder/core": "^0.4.32",
     "viem": "^1.19.9"
   },
   "devDependencies": {
