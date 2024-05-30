@@ -1,11 +1,3 @@
-# StudioUrl
-# SupabaseUrl
-# SupabaseAnonKey
-# VpcId
-# ClusterArn
-# ClusterSecurityGroup
-# ClusterSupabaseAdminSecret
-
 output "supabase_anon_key" {
   value       = aws_cloudformation_stack.supabase.outputs["SupabaseAnonKey"]
   description = "Anonymous access key for Supabase, safe to use in a browser under secured configurations."

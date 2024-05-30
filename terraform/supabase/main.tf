@@ -1,12 +1,12 @@
 resource "aws_cloudformation_stack" "supabase" {
-  name         = "supabase"
+  name         = local.name
   template_url = "https://s3.us-east-1.amazonaws.com/${aws_s3_bucket.supabase.bucket}/${aws_s3_object.supabase.key}"
 
   parameters = {
-    Email                         = "noreply@gamcaplabs.com"
-    SenderName                    = "GamCap Labs"
-    DisableSignup                 = "false"
-    SiteUrl                       = "http://localhost:3000"
+    Email                         = var.supabase_email
+    SenderName                    = var.supabase_sender_name
+    DisableSignup                 = var.supabase_disable_signup
+    SiteUrl                       = var.supabase_site_url
     RedirectUrls                  = ""
     JwtExpiryLimit                = "3600"
     PasswordMinLength             = "8"
@@ -23,7 +23,7 @@ resource "aws_cloudformation_stack" "supabase" {
     SesRegion                     = "us-east-1"
     EnableWorkMail                = "false"
     KongTaskSize93C195E9          = "medium"
-    AuthTaskSize9895C206          = "medium"
+    AuthTaskSize9895C206          = "small"
     AuthProvider1Name740DD3F6     = ""
     AuthProvider1ClientId5614D178 = ""
     AuthProvider1SecretAE54364F   = ""
@@ -35,8 +35,8 @@ resource "aws_cloudformation_stack" "supabase" {
     AuthProvider3Secret29364F33   = ""
     RestTaskSize14E11A14          = "medium"
     RealtimeTaskSize6077FE1F      = "medium"
-    ImgproxyTaskSize5D0DD9F6      = "medium"
-    StorageTaskSizeB82D9CFB       = "medium"
+    ImgproxyTaskSize5D0DD9F6      = "small"
+    StorageTaskSizeB82D9CFB       = "small"
     MetaTaskSize556D36D9          = "medium"
     StudioBranch                  = "v0.23.09"
   }
@@ -52,7 +52,7 @@ resource "aws_cloudformation_stack" "supabase" {
 }
 
 resource "aws_s3_bucket" "supabase" {
-  bucket = "${local.app_name}-supabase-utils"
+  bucket = "${local.name}-utils"
 }
 
 resource "aws_s3_object" "supabase" {

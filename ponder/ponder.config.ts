@@ -9,7 +9,7 @@ export default createConfig({
     poolConfig: {
       max: 300
     },
-    schema: "ponder_prod",
+    schema: "ponder_data",
   },
   networks: {
     mainnet: {

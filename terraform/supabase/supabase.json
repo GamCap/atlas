@@ -6927,7 +6927,7 @@
                         "Environment": [
                             {
                                 "Name": "PGRST_DB_SCHEMAS",
-                                "Value": "public,storage,graphql_public"
+                                "Value": "public,storage,graphql_public,ponder_data"
                             },
                             {
                                 "Name": "PGRST_DB_ANON_ROLE",
