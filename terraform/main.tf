@@ -10,12 +10,12 @@ module "tags" {
 }
 
 module "supabase" {
-  source   = "./supabase"
-  app_name = local.app_name
-  supabase_email = "noreply@gamcaplabs.com"
-  supabase_sender_name = "GamCap Labs"
+  source                  = "./supabase"
+  app_name                = local.app_name
+  supabase_email          = "noreply@gamcaplabs.com"
+  supabase_sender_name    = "GamCap Labs"
   supabase_disable_signup = "false"
-  supabase_site_url = "http://localhost:3000"
+  supabase_site_url       = "http://localhost:3000"
 }
 
 resource "aws_security_group" "ponder" {
