@@ -31,3 +31,8 @@ variable "postgres_secret_id" {
   description = "The secret for the Postgres database"
   type        = string
 }
+
+variable "ponder_secrets_id" {
+  description = "The secret for the Ponder application"
+  type        = string
+}

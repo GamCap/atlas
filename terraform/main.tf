@@ -56,4 +56,5 @@ module "ponder" {
   private_subnet_ids = data.aws_subnets.supabase_private.ids
   region             = var.region
   postgres_secret_id = data.aws_secretsmanager_secret.cluster_postgres_secret.id
+  ponder_secrets_id  = aws_secretsmanager_secret.ponder_secrets.id
 }

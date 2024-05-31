@@ -40,7 +40,7 @@ module "ecs_service" {
     {
       effect    = "Allow"
       actions   = ["secretsmanager:GetSecretValue", "secretsmanager:DescribeSecret"]
-      resources = [var.postgres_secret_id]
+      resources = [var.postgres_secret_id, var.ponder_secrets_id]
       sid       = "AllowGetSecretValue"
     },
     {
@@ -87,20 +87,20 @@ module "ecs_service" {
         {
           name  = "MODE"
           value = "indexer"
-        },
-        {
-          name  = "PONDER_RPC_URLS_1"
-          value = "https://eth-mainnet.alchemyapi.io/v2/saJ_d7L6OvoZ3t6jL7ewhv7ONWWi_J29,https://eth-mainnet.alchemyapi.io/v2/AwMJLURd9d9VYP_Q2tG7gr52tSP_wBiA,https://eth-mainnet.alchemyapi.io/v2/zjx8baDblg7pbUjvc4zuRARLT28Ft2PC,https://eth-mainnet.alchemyapi.io/v2/0EvZQA7WvDYf40cz476eEIh348_PcZJu"
-        },
-        {
-          name  = "PONDER_RPC_URLS_10"
-          value = "https://opt-mainnet.g.alchemy.com/v2/aUooVzDMm5Vp134Wi07WBlpWeJPq97yX,https://opt-mainnet.g.alchemy.com/v2/aVjgXLi_aJZvM_W_N4e1L-9SJXOEd0L5,https://opt-mainnet.g.alchemy.com/v2/AJMG7qpBNCskviWEj93HW4nioGl8neDp,https://opt-mainnet.g.alchemy.com/v2/aZAch5n6Co6vvepI37ogK-QLiCmofL04,https://opt-mainnet.g.alchemy.com/v2/bEw3og1rC9BHAidSjH24d18OEPFnEyCC"
         }
       ]
       secrets = [
         {
           name      = "DATABASE_URL"
           valueFrom = "${var.postgres_secret_id}:uri::"
+        },
+        {
+          name      = "PONDER_RPC_URLS_1"
+          valueFrom = "${var.postgres_secret_id}:PONDER_RPC_URLS_1::"
+        },
+        {
+          name      = "PONDER_RPC_URLS_10"
+          valueFrom = "${var.postgres_secret_id}:PONDER_RPC_URLS_10::"
         }
       ]
     }
