@@ -96,11 +96,11 @@ module "ecs_service" {
         },
         {
           name      = "PONDER_RPC_URLS_1"
-          valueFrom = "${var.postgres_secret_id}:PONDER_RPC_URLS_1::"
+          valueFrom = "${var.ponder_secrets_id}:PONDER_RPC_URLS_1::"
         },
         {
           name      = "PONDER_RPC_URLS_10"
-          valueFrom = "${var.postgres_secret_id}:PONDER_RPC_URLS_10::"
+          valueFrom = "${var.ponder_secrets_id}:PONDER_RPC_URLS_10::"
         }
       ]
     }
