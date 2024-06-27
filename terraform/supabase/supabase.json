@@ -6942,6 +6942,10 @@
                                 "Value": {
                                     "Ref": "JwtExpiryLimit"
                                 }
+                            },
+                            {
+                                "Name": "PGRST_DB_AGGREGATES_ENABLED",
+                                "Value": "true"
                             }
                         ],
                         "Essential": true,

@@ -10,12 +10,12 @@ resource "aws_cloudformation_stack" "supabase" {
     RedirectUrls                  = ""
     JwtExpiryLimit                = "3600"
     PasswordMinLength             = "8"
-    AuthImageUri                  = "public.ecr.aws/supabase/gotrue:v2.110.0"
-    RestImageUri                  = "public.ecr.aws/supabase/postgrest:v11.2.0"
-    RealtimeImageUri              = "public.ecr.aws/supabase/realtime:v2.25.27"
-    StorageImageUri               = "public.ecr.aws/supabase/storage-api:v0.43.11"
+    AuthImageUri                  = "public.ecr.aws/supabase/gotrue:v2.153.0"
+    RestImageUri                  = "public.ecr.aws/supabase/postgrest:v12.1"
+    RealtimeImageUri              = "public.ecr.aws/supabase/realtime:v2.29.5"
+    StorageImageUri               = "public.ecr.aws/supabase/storage-api:v1.3.3"
     ImgproxyImageUri              = "public.ecr.aws/supabase/imgproxy:v1.2.0"
-    PostgresMetaImageUri          = "public.ecr.aws/supabase/postgres-meta:v0.74.2"
+    PostgresMetaImageUri          = "public.ecr.aws/supabase/postgres-meta:v0.81.1"
     EnableHighAvailability        = "false"
     WebAclArn                     = ""
     MinACU                        = "0.5"
@@ -38,12 +38,14 @@ resource "aws_cloudformation_stack" "supabase" {
     ImgproxyTaskSize5D0DD9F6      = "small"
     StorageTaskSizeB82D9CFB       = "small"
     MetaTaskSize556D36D9          = "medium"
-    StudioBranch                  = "v0.23.09"
+    StudioBranch                  = "v1.24.04"
   }
 
   timeout_in_minutes = 0
   disable_rollback   = false
   capabilities       = ["CAPABILITY_NAMED_IAM", "CAPABILITY_AUTO_EXPAND"]
+
+  on_failure = "DO_NOTHING"
 
   # This is a workaround
   lifecycle {
