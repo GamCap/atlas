@@ -42,7 +42,6 @@ export default createConfig({
 				"0xf7134CE138832c1456F2a91D64621eE90c2bddEa",
 			],
 			startBlock: 17634324,
-			endBlock: 17646832,
 			filter: {
 				event: "TreeChanged",
 			},

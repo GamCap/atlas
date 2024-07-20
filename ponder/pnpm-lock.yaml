@@ -9,8 +9,11 @@ importers:
   .:
     dependencies:
       '@ponder/core':
-        specifier: ^0.4.33
-        version: 0.4.36(@types/node@20.12.12)(typescript@5.4.5)(viem@1.21.4(typescript@5.4.5))
+        specifier: ^0.5.0
+        version: 0.5.0(@opentelemetry/api@1.9.0)(@types/node@20.12.12)(hono@4.5.1)(typescript@5.4.5)(viem@1.21.4(typescript@5.4.5))
+      hono:
+        specifier: ^4.5.1
+        version: 4.5.1
       viem:
         specifier: ^1.19.9
         version: 1.21.4(typescript@5.4.5)
@@ -293,9 +296,6 @@ packages:
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
     engines: {node: '>=12'}
 
-  '@jridgewell/sourcemap-codec@1.4.15':
-    resolution: {integrity: sha512-eF2rxCRulEKXHTRiDrDy6erMYWqNw4LPdQ8UQA4huuxaQsVeRPFl2oM8oDGxMFhJUWZf9McpLtJasDDZb/Bpeg==}
-
   '@kamilkisiela/fast-url-parser@1.1.4':
     resolution: {integrity: sha512-gbkePEBupNydxCelHCESvFSFM8XPh1Zs/OAVRW/rKpEqPAl5PbOM90Si8mv9bvnR53uPD2s/FiRxdvSejpRJew==}
 
@@ -330,19 +330,20 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
-  '@ponder/core@0.4.36':
-    resolution: {integrity: sha512-Zlwv7OnKU5IVr9ZFHM38Xw8r6yDEypX9IfDmcGVbZa2M53pOWvv0H6u9K0rdDD6YQICY5P16LlfcKfQFHjEIbQ==}
+  '@ponder/core@0.5.0':
+    resolution: {integrity: sha512-C8O7MMEs9n1EzGfe6KePFbCwRz1M8SYW+Cw0bHkRB2fzuFT3EwYYS8mlhxeiAYvhNJvM8M95i53JRi3CRsUbZw==}
     engines: {node: '>=18.14'}
     hasBin: true
     peerDependencies:
+      hono: '>=4.5'
       typescript: '>=5.0.4'
       viem: '>=1.16'
     peerDependenciesMeta:
       typescript:
         optional: true
 
-  '@ponder/utils@0.1.6':
-    resolution: {integrity: sha512-j0/nq8k356oZfHtNWn3NumVUlZdPjgIhtXTsiTR/7FYV+tvv6kj4FL1809WARxAhL4qDADHxErz9/A4/uxuw0w==}
+  '@ponder/utils@0.1.7':
+    resolution: {integrity: sha512-MZjHG2KMMuIE6/at9SsMUs0vKKY53TSjBcxXa0gLdvcUOa04BGY4LLhzs0Y4c1mVh9sj++lJfbaS1BZ+1yVaIQ==}
     peerDependencies:
       typescript: '>=5.0.4'
       viem: '>=1.16'
@@ -629,8 +630,8 @@ packages:
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
 
-  better-sqlite3@10.1.0:
-    resolution: {integrity: sha512-hqpHJaCfKEZFaAWdMh6crdzRWyzQzfP6Ih8TYI0vFn01a6ZTDSbJIMXN+6AMBaBOh99DzUy8l3PsV9R3qnJDng==}
+  better-sqlite3@11.1.2:
+    resolution: {integrity: sha512-gujtFwavWU4MSPT+h9B+4pkvZdyOUkH54zgLdIrMmmmd4ZqiBIrRNBzNzYVFO417xo882uP5HBu4GjOfaSrIQw==}
 
   bindings@1.5.0:
     resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
@@ -797,6 +798,95 @@ packages:
   dotenv@16.4.5:
     resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
     engines: {node: '>=12'}
+
+  drizzle-orm@0.31.4:
+    resolution: {integrity: sha512-VGD9SH9aStF2z4QOTnVlVX/WghV/EnuEzTmsH3fSVp2E4fFgc8jl3viQrS/XUJx1ekW4rVVLJMH42SfGQdjX3Q==}
+    peerDependencies:
+      '@aws-sdk/client-rds-data': '>=3'
+      '@cloudflare/workers-types': '>=3'
+      '@electric-sql/pglite': '>=0.1.1'
+      '@libsql/client': '*'
+      '@neondatabase/serverless': '>=0.1'
+      '@op-engineering/op-sqlite': '>=2'
+      '@opentelemetry/api': ^1.4.1
+      '@planetscale/database': '>=1'
+      '@prisma/client': '*'
+      '@tidbcloud/serverless': '*'
+      '@types/better-sqlite3': '*'
+      '@types/pg': '*'
+      '@types/react': '>=18'
+      '@types/sql.js': '*'
+      '@vercel/postgres': '>=0.8.0'
+      '@xata.io/client': '*'
+      better-sqlite3: '>=7'
+      bun-types: '*'
+      expo-sqlite: '>=13.2.0'
+      knex: '*'
+      kysely: '*'
+      mysql2: '>=2'
+      pg: '>=8'
+      postgres: '>=3'
+      prisma: '*'
+      react: '>=18'
+      sql.js: '>=1'
+      sqlite3: '>=5'
+    peerDependenciesMeta:
+      '@aws-sdk/client-rds-data':
+        optional: true
+      '@cloudflare/workers-types':
+        optional: true
+      '@electric-sql/pglite':
+        optional: true
+      '@libsql/client':
+        optional: true
+      '@neondatabase/serverless':
+        optional: true
+      '@op-engineering/op-sqlite':
+        optional: true
+      '@opentelemetry/api':
+        optional: true
+      '@planetscale/database':
+        optional: true
+      '@prisma/client':
+        optional: true
+      '@tidbcloud/serverless':
+        optional: true
+      '@types/better-sqlite3':
+        optional: true
+      '@types/pg':
+        optional: true
+      '@types/react':
+        optional: true
+      '@types/sql.js':
+        optional: true
+      '@vercel/postgres':
+        optional: true
+      '@xata.io/client':
+        optional: true
+      better-sqlite3:
+        optional: true
+      bun-types:
+        optional: true
+      expo-sqlite:
+        optional: true
+      knex:
+        optional: true
+      kysely:
+        optional: true
+      mysql2:
+        optional: true
+      pg:
+        optional: true
+      postgres:
+        optional: true
+      prisma:
+        optional: true
+      react:
+        optional: true
+      sql.js:
+        optional: true
+      sqlite3:
+        optional: true
 
   dset@3.1.3:
     resolution: {integrity: sha512-20TuZZHCEZ2O71q9/+8BwKwZ0QtD9D8ObhrihJPr+vLLYlSuAU3/zL4cSlgbfeoGHTjCSJBa7NGcrF9/Bx/WJQ==}
@@ -1006,11 +1096,6 @@ packages:
   graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
 
-  graphql-type-json@0.3.2:
-    resolution: {integrity: sha512-J+vjof74oMlCWXSvt0DOf2APEdZOCdubEvGDUAlqH//VBYcOYsGgRW7Xzorr44LvkjiuvecWc8fChxuZZbChtg==}
-    peerDependencies:
-      graphql: '>=0.8.0'
-
   graphql-yoga@5.3.1:
     resolution: {integrity: sha512-n918QV6TF7xTjb9ASnozgsr4ydMc08c+x4eRAWKxxWVwSnzdP2xeN2zw1ljIzRD0ccSCNoBajGDKwcZkJDitPA==}
     engines: {node: '>=18.0.0'}
@@ -1029,8 +1114,8 @@ packages:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
 
-  hono@4.4.5:
-    resolution: {integrity: sha512-hyf+1c+gTEo0+xjdYT2e8y4M3HcEy0ARuRZHPRgeRhq/mupkI4j9/qEWVKsyj0se4KhfRnYrld4Tk6z/9veq/Q==}
+  hono@4.5.1:
+    resolution: {integrity: sha512-6q8AugoWG5wlrjdGG8OFFiqEsPlPGjODjUik48sEJeko4Tae1UsLS2vUiYHLEJx1gJvOZa4BWkQC+urwDmkEvQ==}
     engines: {node: '>=16.0.0'}
 
   http-terminator@3.2.0:
@@ -1183,9 +1268,6 @@ packages:
   lru-cache@10.2.2:
     resolution: {integrity: sha512-9hp3Vp2/hFQUiIwKo8XCeFVnrg8Pk3TYNPIR7tJADKi5YfcF7vEaK7avFHTlSy3kOKYaJQaalfEo6YuXdceBOQ==}
     engines: {node: 14 || >=16.14}
-
-  magic-string@0.30.10:
-    resolution: {integrity: sha512-iIRwTIf0QKV3UAnYK4PU8uiEc4SRh5jX0mwpIwETPpHdhVM4f53RSwS/vXvN1JhGX+Cs7B8qIq3d6AH49O5fAQ==}
 
   merge-stream@2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
@@ -2024,8 +2106,6 @@ snapshots:
       wrap-ansi: 8.1.0
       wrap-ansi-cjs: wrap-ansi@7.0.0
 
-  '@jridgewell/sourcemap-codec@1.4.15': {}
-
   '@kamilkisiela/fast-url-parser@1.1.4': {}
 
   '@noble/curves@1.2.0':
@@ -2053,7 +2133,7 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@ponder/core@0.4.36(@types/node@20.12.12)(typescript@5.4.5)(viem@1.21.4(typescript@5.4.5))':
+  '@ponder/core@0.5.0(@opentelemetry/api@1.9.0)(@types/node@20.12.12)(hono@4.5.1)(typescript@5.4.5)(viem@1.21.4(typescript@5.4.5))':
     dependencies:
       '@babel/code-frame': 7.24.7
       '@commander-js/extra-typings': 12.1.0(commander@12.1.0)
@@ -2061,25 +2141,24 @@ snapshots:
       '@escape.tech/graphql-armor-max-depth': 2.3.0
       '@escape.tech/graphql-armor-max-tokens': 2.4.0
       '@hono/node-server': 1.11.2
-      '@ponder/utils': 0.1.6(typescript@5.4.5)(viem@1.21.4(typescript@5.4.5))
+      '@ponder/utils': 0.1.7(typescript@5.4.5)(viem@1.21.4(typescript@5.4.5))
       abitype: 0.10.3(typescript@5.4.5)
-      better-sqlite3: 10.1.0
+      better-sqlite3: 11.1.2
       commander: 12.1.0
       conf: 12.0.0
       dataloader: 2.2.2
       detect-package-manager: 3.0.2
       dotenv: 16.4.5
+      drizzle-orm: 0.31.4(@opentelemetry/api@1.9.0)(better-sqlite3@11.1.2)(kysely@0.26.3)(pg@8.12.0)(react@18.3.1)
       emittery: 1.0.3
       ethereum-bloom-filters: 1.1.0
       glob: 10.4.1
       graphql: 16.8.2
-      graphql-type-json: 0.3.2(graphql@16.8.2)
       graphql-yoga: 5.3.1(graphql@16.8.2)
-      hono: 4.4.5
+      hono: 4.5.1
       http-terminator: 3.2.0
       ink: 4.4.1(react@18.3.1)
       kysely: 0.26.3
-      magic-string: 0.30.10
       p-queue: 7.4.1
       pg: 8.12.0
       pg-connection-string: 2.6.4
@@ -2095,14 +2174,37 @@ snapshots:
     optionalDependencies:
       typescript: 5.4.5
     transitivePeerDependencies:
+      - '@aws-sdk/client-rds-data'
+      - '@cloudflare/workers-types'
+      - '@electric-sql/pglite'
+      - '@libsql/client'
+      - '@neondatabase/serverless'
+      - '@op-engineering/op-sqlite'
+      - '@opentelemetry/api'
+      - '@planetscale/database'
+      - '@prisma/client'
+      - '@tidbcloud/serverless'
+      - '@types/better-sqlite3'
       - '@types/node'
+      - '@types/pg'
       - '@types/react'
+      - '@types/sql.js'
+      - '@vercel/postgres'
+      - '@xata.io/client'
       - bufferutil
+      - bun-types
+      - expo-sqlite
+      - knex
       - less
       - lightningcss
+      - mysql2
       - pg-native
+      - postgres
+      - prisma
       - react-devtools-core
       - sass
+      - sql.js
+      - sqlite3
       - stylus
       - sugarss
       - supports-color
@@ -2110,7 +2212,7 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@ponder/utils@0.1.6(typescript@5.4.5)(viem@1.21.4(typescript@5.4.5))':
+  '@ponder/utils@0.1.7(typescript@5.4.5)(viem@1.21.4(typescript@5.4.5))':
     dependencies:
       viem: 1.21.4(typescript@5.4.5)
     optionalDependencies:
@@ -2366,7 +2468,7 @@ snapshots:
 
   base64-js@1.5.1: {}
 
-  better-sqlite3@10.1.0:
+  better-sqlite3@11.1.2:
     dependencies:
       bindings: 1.5.0
       prebuild-install: 7.1.2
@@ -2527,6 +2629,14 @@ snapshots:
       type-fest: 3.13.1
 
   dotenv@16.4.5: {}
+
+  drizzle-orm@0.31.4(@opentelemetry/api@1.9.0)(better-sqlite3@11.1.2)(kysely@0.26.3)(pg@8.12.0)(react@18.3.1):
+    optionalDependencies:
+      '@opentelemetry/api': 1.9.0
+      better-sqlite3: 11.1.2
+      kysely: 0.26.3
+      pg: 8.12.0
+      react: 18.3.1
 
   dset@3.1.3: {}
 
@@ -2785,10 +2895,6 @@ snapshots:
 
   graphemer@1.4.0: {}
 
-  graphql-type-json@0.3.2(graphql@16.8.2):
-    dependencies:
-      graphql: 16.8.2
-
   graphql-yoga@5.3.1(graphql@16.8.2):
     dependencies:
       '@envelop/core': 5.0.1
@@ -2810,7 +2916,7 @@ snapshots:
 
   has-flag@4.0.0: {}
 
-  hono@4.4.5: {}
+  hono@4.5.1: {}
 
   http-terminator@3.2.0:
     dependencies:
@@ -2955,10 +3061,6 @@ snapshots:
       js-tokens: 4.0.0
 
   lru-cache@10.2.2: {}
-
-  magic-string@0.30.10:
-    dependencies:
-      '@jridgewell/sourcemap-codec': 1.4.15
 
   merge-stream@2.0.0: {}
 

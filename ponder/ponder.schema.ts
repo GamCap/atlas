@@ -4,10 +4,11 @@ export default createSchema((p) => ({
   RootKind: p.createEnum(["Insert", "Remove"]),
 
   Root: p.createTable({
-    id: p.bigint(),
+    id: p.string(),
     kind: p.enum("RootKind").optional(),
-    preRoot: p.bigint().references("Root.id").optional(),
-    postRoot: p.bigint().references("Root.id").optional(),
+    preRoot: p.string().references("Root.id"),
+    postRoot: p.string().references("Root.id").optional(),
+    createdTx: p.hex(),
     timestamp: p.int(),
   }),
   //TransferEventOptimism: p.createTable({
