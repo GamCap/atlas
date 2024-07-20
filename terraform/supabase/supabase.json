@@ -10372,28 +10372,7 @@
                     "Fn::Join": [
                         "",
                         [
-                            "version: 1\napplications:\n  - appRoot: studio\n    frontend:\n      phases:\n        preBuild:\n          commands:\n            - echo POSTGRES_PASSWORD=$(aws secretsmanager get-secret-value --secret-id $DB_SECRET_ARN --query SecretString | jq -r . | jq -r .password) >> .env.production\n            - echo SUPABASE_ANON_KEY=$(aws ssm get-parameter --region $SUPABASE_REGION --name $ANON_KEY_NAME --query Parameter.Value) >> .env.production\n            - echo SUPABASE_SERVICE_KEY=$(aws ssm get-parameter --region $SUPABASE_REGION --name $SERVICE_KEY_NAME --query Parameter.Value) >> .env.production\n            - env | grep -e STUDIO_PG_META_URL >> .env.production\n            - env | grep -e SUPABASE_ >> .env.production\n            - env | grep -e NEXT_PUBLIC_ >> .env.production\n            - cd ../\n            - npx turbo@1.10.3 prune --scope=studio\n            - npm clean-install\n        build:\n          commands:\n            - npx turbo run build --scope=studio --include-dependencies --no-deps\n            - npm prune --omit=dev\n        postBuild:\n          commands:\n            - cd studio\n            - rsync -av --ignore-existing .next/standalone/",
-                            {
-                                "Fn::GetAtt": [
-                                    "StudioRepositoryE0EFFBE2",
-                                    "Name"
-                                ]
-                            },
-                            "/studio/ .next/standalone/\n            - rsync -av --ignore-existing .next/standalone/",
-                            {
-                                "Fn::GetAtt": [
-                                    "StudioRepositoryE0EFFBE2",
-                                    "Name"
-                                ]
-                            },
-                            "/node_modules/ .next/standalone/node_modules/\n            - rm -rf .next/standalone/",
-                            {
-                                "Fn::GetAtt": [
-                                    "StudioRepositoryE0EFFBE2",
-                                    "Name"
-                                ]
-                            },
-                            "\n            - cp .env .env.production .next/standalone/\n            - rsync -av --ignore-existing public/ .next/standalone/public/\n            - rsync -av --ignore-existing .next/static/ .next/standalone/.next/static/\n      artifacts:\n        baseDirectory: .next\n        files:\n          - \"**/*\"\n      cache:\n        paths:\n          - node_modules/**/*\n"
+                            "version: 1\napplications:\n  - appRoot: apps/studio\n    frontend:\n      phases:\n        preBuild:\n          commands:\n            - echo POSTGRES_PASSWORD=$(aws secretsmanager get-secret-value --secret-id $DB_SECRET_ARN --query SecretString | jq -r . | jq -r .password) >> .env.production\n            - echo SUPABASE_ANON_KEY=$(aws ssm get-parameter --region $SUPABASE_REGION --name $ANON_KEY_NAME --query Parameter.Value) >> .env.production\n            - echo SUPABASE_SERVICE_KEY=$(aws ssm get-parameter --region $SUPABASE_REGION --name $SERVICE_KEY_NAME --query Parameter.Value) >> .env.production\n            - env | grep -e STUDIO_PG_META_URL >> .env.production\n            - env | grep -e SUPABASE_ >> .env.production\n            - env | grep -e NEXT_PUBLIC_ >> .env.production\n            - cd ../../\n            - npx turbo@1.10.3 prune --scope=studio\n            - npm clean-install\n        build:\n          commands:\n            - npx turbo run build --scope=studio --include-dependencies --no-deps\n            - npm prune --omit=dev\n        postBuild:\n          commands:\n            - cd apps/studio\n            - rsync -av --ignore-existing .next/standalone/apps/studio/ .next/standalone/\n            - rsync -av --ignore-existing .next/standalone/apps/studio/node_modules/ .next/standalone/node_modules/\n            - rm -rf .next/standalone/apps\n            - cp .env .env.production .next/standalone/\n            - rsync -av --ignore-existing public/ .next/standalone/public/\n            - rsync -av --ignore-existing .next/static/ .next/standalone/.next/static/\n      artifacts:\n        baseDirectory: .next\n        files:\n          - \"**/*\"\n      cache:\n        paths:\n          - node_modules/**/*\n"
                         ]
                     ]
                 },

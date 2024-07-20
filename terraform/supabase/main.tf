@@ -22,7 +22,7 @@ resource "aws_cloudformation_stack" "supabase" {
     MaxACU                        = "16"
     SesRegion                     = "us-east-1"
     EnableWorkMail                = "false"
-    KongTaskSize93C195E9          = "medium"
+    KongTaskSize93C195E9          = "small"
     AuthTaskSize9895C206          = "small"
     AuthProvider1Name740DD3F6     = ""
     AuthProvider1ClientId5614D178 = ""
@@ -33,11 +33,11 @@ resource "aws_cloudformation_stack" "supabase" {
     AuthProvider3NameA8A7785F     = ""
     AuthProvider3ClientId8DF3C6F7 = ""
     AuthProvider3Secret29364F33   = ""
-    RestTaskSize14E11A14          = "medium"
-    RealtimeTaskSize6077FE1F      = "medium"
+    RestTaskSize14E11A14          = "small"
+    RealtimeTaskSize6077FE1F      = "small"
     ImgproxyTaskSize5D0DD9F6      = "small"
     StorageTaskSizeB82D9CFB       = "small"
-    MetaTaskSize556D36D9          = "medium"
+    MetaTaskSize556D36D9          = "small"
     StudioBranch                  = "v1.24.04"
   }
 
