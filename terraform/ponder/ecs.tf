@@ -33,8 +33,8 @@ module "ecs_service" {
     type = "ECS"
   }
 
-  cpu    = 2048
-  memory = 8192
+  cpu    = 1024
+  memory = 4096
 
   task_exec_iam_statements = [
     {
@@ -57,8 +57,8 @@ module "ecs_service" {
 
   container_definitions = {
     indexer = {
-      cpu       = 2048
-      memory    = 8192
+      cpu       = 1024
+      memory    = 4096
       essential = true
       image     = aws_ecr_repository.ecr.repository_url
       healthCheck = {

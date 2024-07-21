@@ -23,7 +23,7 @@ resource "aws_cloudformation_stack" "supabase" {
     SesRegion                     = "us-east-1"
     EnableWorkMail                = "false"
     KongTaskSize93C195E9          = "small"
-    AuthTaskSize9895C206          = "small"
+    AuthTaskSize9895C206          = "none"
     AuthProvider1Name740DD3F6     = ""
     AuthProvider1ClientId5614D178 = ""
     AuthProvider1SecretAE54364F   = ""
@@ -35,10 +35,10 @@ resource "aws_cloudformation_stack" "supabase" {
     AuthProvider3Secret29364F33   = ""
     RestTaskSize14E11A14          = "small"
     RealtimeTaskSize6077FE1F      = "small"
-    ImgproxyTaskSize5D0DD9F6      = "small"
+    ImgproxyTaskSize5D0DD9F6      = "none"
     StorageTaskSizeB82D9CFB       = "small"
     MetaTaskSize556D36D9          = "small"
-    StudioBranch                  = "v1.24.04"
+    StudioBranch                  = "v1.24.05"
   }
 
   timeout_in_minutes = 0
@@ -48,9 +48,9 @@ resource "aws_cloudformation_stack" "supabase" {
   on_failure = "DO_NOTHING"
 
   # This is a workaround
-  lifecycle {
-    ignore_changes = all
-  }
+  # lifecycle {
+  #   ignore_changes = all
+  # }
 }
 
 resource "aws_s3_bucket" "supabase" {
