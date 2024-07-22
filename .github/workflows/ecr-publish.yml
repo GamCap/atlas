@@ -34,6 +34,14 @@ jobs:
           SHORT_SHA=$(git rev-parse --short ${GITHUB_SHA})
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$SHORT_SHA -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
           docker push -a $ECR_REGISTRY/$ECR_REPOSITORY
+      
+      - name: Stop running ECS tasks
+        run: |
+          TASK_ARN=$(aws ecs list-tasks --cluster atlas-ponder --service-name indexer --query 'taskArns[0]' --output text)
+          if [ "$TASK_ARN" != "None" ]; then
+            aws ecs stop-task --cluster atlas-ponder --task $TASK_ARN
+          fi
+  
       - name: Update ECS service to force new deployment
         run: |
           aws ecs update-service --cluster atlas-ponder --service indexer --force-new-deployment
