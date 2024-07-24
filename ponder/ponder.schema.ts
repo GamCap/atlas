@@ -10,6 +10,7 @@ export default createSchema((p) => ({
     postRoot: p.string().references("Root.id").optional(),
     createdTx: p.hex(),
     timestamp: p.int(),
+    blockNumber: p.bigint(),
   }),
   
   Account: p.createTable({

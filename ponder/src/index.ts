@@ -9,6 +9,7 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 			preRoot: String(event.args.preRoot),
             createdTx: event.transaction.hash,
 			timestamp: Number(event.block.timestamp),
+			blockNumber: event.block.number
 		},
 	});
 	try {
