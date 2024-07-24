@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - "ponder/**"
+      - "ponder_app/**"
 
 jobs:
   deploy:
@@ -29,7 +29,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: atlas-ponder
-        working-directory: ./ponder
+        working-directory: ./ponder_app
         run: |
           SHORT_SHA=$(git rev-parse --short ${GITHUB_SHA})
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$SHORT_SHA -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
