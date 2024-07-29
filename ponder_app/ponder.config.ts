@@ -14,6 +14,9 @@ export default createConfig({
 		schema: "ponder_data",
 		publishSchema: "atlas",
 	},
+	options: {
+		enableBigQueryAccelerator: true,
+	},
 	networks: {
 		mainnet: {
 			chainId: 1,
@@ -35,33 +38,33 @@ export default createConfig({
 		},
 	},
 	contracts: {
-		WorldIDIdentityManager: {
-			network: "mainnet",
-			abi: mergeAbis([WorldIDIdentityManager1, WorldIDIdentityManager2]),
-			address: [
-				"0x316350D3EC608fFc30b01DcB7475De1C676cE910",
-				"0xf7134CE138832c1456F2a91D64621eE90c2bddEa",
-			],
-			startBlock: 17634324,
+		//WorldIDIdentityManager: {
+		//	network: "mainnet",
+		//	abi: mergeAbis([WorldIDIdentityManager1, WorldIDIdentityManager2]),
+		//	address: [
+		//		"0x316350D3EC608fFc30b01DcB7475De1C676cE910",
+		//		"0xf7134CE138832c1456F2a91D64621eE90c2bddEa",
+		//	],
+		//	startBlock: 17634324,
+		//	filter: {
+		//		event: "TreeChanged",
+		//	},
+		//},
+		WLD: {
+			network: {
+				mainnet: {
+				  address: "0x163f8C2467924be0ae7B5347228CABF260318753",
+				  startBlock: 17714705,
+				},
+				optimism: {
+				  address: "0xdC6fF44d5d932Cbd77B52E5612Ba0529DC6226F1",
+				  startBlock: 107087966,
+				},
+			},
+			abi: mergeAbis([WLDERC20, OptimismMintableERC20]),
 			filter: {
-				event: "TreeChanged",
+				event: ["Transfer", "Approval"],
 			},
 		},
-		// WLD: {
-		// 	network: {
-		// 		mainnet: {
-		// 		  address: "0x163f8C2467924be0ae7B5347228CABF260318753",
-		// 		  startBlock: 17714705,
-		// 		},
-		// 		optimism: {
-		// 		  address: "0xdC6fF44d5d932Cbd77B52E5612Ba0529DC6226F1",
-		// 		  startBlock: 107087966,
-		// 		},
-		// 	},
-		// 	abi: mergeAbis([WLDERC20, OptimismMintableERC20]),
-		// 	filter: {
-		// 		event: ["Transfer", "Approval"],
-		// 	},
-		// },
 	},
 });
