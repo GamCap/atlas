@@ -13,8 +13,8 @@ WORKDIR /app
 # Copy the package.json and pnpm-lock.yaml (if available)
 COPY package.json pnpm-lock.yaml ./
 
-# Install production dependencies using pnpm
-RUN pnpm install --prod
+# Install all dependencies using pnpm
+RUN pnpm install
 
 # Copy the rest of your application code, including the startup script
 COPY . .
