@@ -1,6 +1,9 @@
 # Use an Alpine Linux image with Node.js
 FROM node:18-alpine
 
+# Install git
+RUN apk add --no-cache git
+
 # Install pnpm
 RUN npm install -g pnpm
 
