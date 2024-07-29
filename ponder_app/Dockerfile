@@ -10,8 +10,11 @@ COPY package*.json ./
 # Install production dependencies
 RUN npm install --production
 
-# Copy the rest of your application code
+# Copy the rest of your application code, including the startup script
 COPY . .
+
+# Make sure the startup script is executable
+RUN chmod +x /app/startup.sh
 
 # Expose the environment variable MODE to select between indexer and server
 ENV MODE=indexer
@@ -19,5 +22,5 @@ ENV MODE=indexer
 # Set the default port for the application to listen on
 EXPOSE 3000
 
-# Use a script to decide what command to run based on the MODE environment variable
-CMD if [ "$MODE" = "server" ]; then npm run serve; else npm run start; fi
+# Use the existing startup script as the entrypoint
+CMD ["/app/startup.sh"]
