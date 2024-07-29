@@ -1,14 +1,17 @@
 # Use an Alpine Linux image with Node.js
 FROM node:18-alpine
 
+# Install pnpm
+RUN npm install -g pnpm
+
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the package.json and package-lock.json (if available)
-COPY package*.json ./
+# Copy the package.json and pnpm-lock.yaml (if available)
+COPY package.json pnpm-lock.yaml ./
 
-# Install production dependencies
-RUN npm install --production
+# Install production dependencies using pnpm
+RUN pnpm install --prod
 
 # Copy the rest of your application code, including the startup script
 COPY . .
