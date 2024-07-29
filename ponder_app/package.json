@@ -9,7 +9,7 @@
     "codegen": "pnpm run ponder codegen",
     "lint": "eslint .",
     "typecheck": "tsc",
-    "prepare": "git clone --branch feat/bigquery-sync-historical --single-branch https://github.com/erensanlier/ponder.git ../temp-ponder && cd ../temp-ponder && pnpm install && pnpm build && cd -"
+    "prepare": "git clone --branch feat/bigquery-sync-historical --single-branch https://github.com/erensanlier/ponder.git ../temp-ponder && cd ../temp-ponder && pnpm install && pnpm build || true && cd -"
   },
   "dependencies": {
     "@ponder/core": "link:../temp-ponder/packages/core",
