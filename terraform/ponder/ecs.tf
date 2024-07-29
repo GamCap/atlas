@@ -101,7 +101,27 @@ module "ecs_service" {
         {
           name      = "PONDER_RPC_URLS_10"
           valueFrom = "${var.ponder_secrets_id}:PONDER_RPC_URLS_10::"
-        }
+        },
+        {
+          name      = "GCP_BUCKET_NAME"
+          valueFrom = "${var.ponder_secrets_id}:GCP_BUCKET_NAME::"
+        },
+        {
+          name      = "GCP_DIRECTORY"
+          valueFrom = "${var.ponder_secrets_id}:GCP_DIRECTORY::"
+        },
+        {
+          name      = "GCP_PROJECT"
+          valueFrom = "${var.ponder_secrets_id}:GCP_PROJECT::"
+        },
+        {
+          name      = "GCP_TEMP_DATASET_ID"
+          valueFrom = "${var.ponder_secrets_id}:GCP_TEMP_DATASET_ID::"
+        },
+        {
+          name      = "GOOGLE_APPLICATION_CREDENTIALS_BASE64"
+          valueFrom = "${var.ponder_secrets_id}:GOOGLE_APPLICATION_CREDENTIALS_BASE64::"
+        },
       ]
     }
   }
