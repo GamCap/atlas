@@ -15,7 +15,7 @@ export default createConfig({
 		publishSchema: "atlas",
 	},
 	options: {
-		enableBigQueryAccelerator: true,
+		enableBigQueryAccelerator: false,
 	},
 	networks: {
 		mainnet: {
@@ -38,18 +38,18 @@ export default createConfig({
 		},
 	},
 	contracts: {
-		//WorldIDIdentityManager: {
-		//	network: "mainnet",
-		//	abi: mergeAbis([WorldIDIdentityManager1, WorldIDIdentityManager2]),
-		//	address: [
-		//		"0x316350D3EC608fFc30b01DcB7475De1C676cE910",
-		//		"0xf7134CE138832c1456F2a91D64621eE90c2bddEa",
-		//	],
-		//	startBlock: 17634324,
-		//	filter: {
-		//		event: "TreeChanged",
-		//	},
-		//},
+		WorldIDIdentityManager: {
+			network: "mainnet",
+			abi: mergeAbis([WorldIDIdentityManager1, WorldIDIdentityManager2]),
+			address: [
+				"0x316350D3EC608fFc30b01DcB7475De1C676cE910",
+				"0xf7134CE138832c1456F2a91D64621eE90c2bddEa",
+			],
+			startBlock: 17634324,
+			filter: {
+				event: "TreeChanged",
+			},
+		},
 		WLD: {
 			network: {
 				mainnet: {
