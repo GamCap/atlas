@@ -59,6 +59,7 @@ export default createConfig({
 				optimism: {
 				  address: "0xdC6fF44d5d932Cbd77B52E5612Ba0529DC6226F1",
 				  startBlock: 107087966,
+				  endBlock: 110000000,
 				},
 			},
 			abi: mergeAbis([WLDERC20, OptimismMintableERC20]),
