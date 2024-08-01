@@ -1,7 +1,7 @@
 import {ponder} from "@/generated";
 
 ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
-    const { Root } = context.db;
+    const { Root, Stats } = context.db;
 
     if (event.args.kind === 0) {
         // Function: registerIdentities(uint256[8] insertionProof,uint256 preRoot,uint32 startIndex,uint256[] identityCommitments,uint256 postRoot)
@@ -25,6 +25,16 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
             }
 
             const numIdentities = identityCommitments.length;
+
+			await Stats.upsert({
+				id: "total",
+				create: {
+					numIdentitiesTotal: BigInt(numIdentities),
+				},
+				update: ({ current }) => ({
+					numIdentitiesTotal: current.numIdentitiesTotal + BigInt(numIdentities),
+				}),
+			});
 
             await Root.create({
                 id: String(event.args.postRoot),
@@ -67,6 +77,16 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 
             // Calculate batch size
             const batchSize = packedDeletionIndicesLength / 8; // 4 bytes per index = 8 hex chars per index
+
+			await Stats.upsert({
+				id: "total",
+				create: {
+					numIdentitiesTotal: BigInt(-1) * BigInt(batchSize),
+				},
+				update: ({ current }) => ({
+					numIdentitiesTotal: current.numIdentitiesTotal - BigInt(batchSize),
+				}),
+			});
 
             await Root.create({
                 id: String(event.args.postRoot),

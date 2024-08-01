@@ -13,6 +13,11 @@ export default createSchema((p) => ({
     timestamp: p.int(),
     blockNumber: p.bigint(),
   }),
+
+  Stats: p.createTable({
+    id: p.string(),
+    numIdentitiesTotal: p.bigint(),
+  }),
   
   // Account: p.createTable({
   //   id: p.hex(),
