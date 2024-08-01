@@ -14,9 +14,6 @@ export default createConfig({
 		schema: "ponder_data",
 		publishSchema: "atlas",
 	},
-	options: {
-		enableBigQueryAccelerator: false,
-	},
 	networks: {
 		mainnet: {
 			chainId: 1,

@@ -9,6 +9,7 @@ export default createSchema((p) => ({
     preRoot: p.string().references("Root.id"),
     postRoot: p.string().references("Root.id").optional(),
     createdTx: p.hex(),
+    numIdentities: p.bigint(),
     timestamp: p.int(),
     blockNumber: p.bigint(),
   }),

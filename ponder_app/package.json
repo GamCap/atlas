@@ -3,16 +3,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "ponder": "node ./node_modules/@ponder/core/dist/bin/ponder.js",
-    "dev": "pnpm run ponder dev",
-    "start": "pnpm run ponder start",
-    "codegen": "pnpm run ponder codegen",
+    "dev": "ponder dev",
+    "start": "ponder start",
+    "codegen": "ponder codegen",
+    "serve": "ponder serve",
     "lint": "eslint .",
-    "typecheck": "tsc",
-    "prepare": "git clone --branch feat/bigquery-sync-historical --single-branch https://github.com/erensanlier/ponder.git ../temp-ponder && cd ../temp-ponder && pnpm install && pnpm build || true && cd -"
+    "typecheck": "tsc"
   },
   "dependencies": {
-    "@ponder/core": "link:../temp-ponder/packages/core",
+    "@ponder/core": "^0.5.6",
     "hono": "^4.5.1",
     "viem": "^1.19.9"
   },
@@ -26,3 +25,4 @@
     "node": ">=18.14"
   }
 }
+
