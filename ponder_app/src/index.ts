@@ -71,8 +71,10 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 					gasSpent: event.transaction.gas,
 					churnRate: 0.0,
 					gasSpentPerIdentityInsertion:
-						Number((event.transaction.gas * 100n) / BigInt(numIdentities)) /
-						100,
+						numIdentities > 0
+							? Number((event.transaction.gas * 100n) / BigInt(numIdentities)) /
+								100
+							: 0.0,
 					gasSpentPerIdentityDeletion: 0.0,
 				},
 				update: ({ current }) => ({
@@ -86,15 +88,19 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 						) / 100,
 					gasSpent: current.gasSpent + event.transaction.gas,
 					churnRate:
-						Number(
-							(current.totalDeletions * 100n) /
-								(current.totalIdentities + BigInt(numIdentities)),
-						) / 100,
+						current.totalIdentities + BigInt(numIdentities) > 0n
+							? Number(
+									(current.totalDeletions * 100n) /
+										(current.totalIdentities + BigInt(numIdentities)),
+								) / 100
+							: current.churnRate, // Avoid division by zero
 					gasSpentPerIdentityInsertion:
-						Number(
-							((current.gasSpent + event.transaction.gas) * 100n) /
-								(current.totalInsertions + BigInt(numIdentities)),
-						) / 100,
+						current.totalInsertions + BigInt(numIdentities) > 0n
+							? Number(
+									((current.gasSpent + event.transaction.gas) * 100n) /
+										(current.totalInsertions + BigInt(numIdentities)),
+								) / 100
+							: current.gasSpentPerIdentityInsertion, // Avoid division by zero
 				}),
 			});
 
@@ -110,8 +116,10 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 					gasSpent: event.transaction.gas,
 					churnRate: 0.0,
 					gasSpentPerIdentityInsertion:
-						Number((event.transaction.gas * 100n) / BigInt(numIdentities)) /
-						100,
+						numIdentities > 0
+							? Number((event.transaction.gas * 100n) / BigInt(numIdentities)) /
+								100
+							: 0.0,
 					gasSpentPerIdentityDeletion: 0.0,
 				},
 				update: ({ current }) => ({
@@ -125,12 +133,14 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 						) / 100,
 					gasSpent: current.gasSpent + event.transaction.gas,
 					churnRate:
-						Number(
-							(current.totalDeletions * 100n) /
-								(current.totalIdentities + BigInt(numIdentities)),
-						) / 100,
+						current.totalIdentities + BigInt(numIdentities) > 0n
+							? Number(
+									(current.totalDeletions * 100n) /
+										(current.totalIdentities + BigInt(numIdentities)),
+								) / 100
+							: current.churnRate, // Avoid division by zero
 					gasSpentPerIdentityInsertion:
-						numIdentities > 0
+						current.totalInsertions + BigInt(numIdentities) > 0n
 							? Number(
 									((current.gasSpent + event.transaction.gas) * 100n) /
 										(current.totalInsertions + BigInt(numIdentities)),
@@ -221,7 +231,9 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 					churnRate: 0.0,
 					gasSpentPerIdentityInsertion: 0.0,
 					gasSpentPerIdentityDeletion:
-						Number((event.transaction.gas * 100n) / BigInt(batchSize)) / 100,
+						batchSize > 0
+							? Number((event.transaction.gas * 100n) / BigInt(batchSize)) / 100
+							: 0.0,
 				},
 				update: ({ current }) => ({
 					totalIdentities: current.totalIdentities - BigInt(batchSize),
@@ -263,7 +275,9 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 					churnRate: 0.0,
 					gasSpentPerIdentityInsertion: 0.0,
 					gasSpentPerIdentityDeletion:
-						Number((event.transaction.gas * 100n) / BigInt(batchSize)) / 100,
+						batchSize > 0
+							? Number((event.transaction.gas * 100n) / BigInt(batchSize)) / 100
+							: 0.0,
 				},
 				update: ({ current }) => ({
 					totalIdentities: current.totalIdentities - BigInt(batchSize),
@@ -276,16 +290,19 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 						) / 100,
 					gasSpent: current.gasSpent + event.transaction.gas,
 					churnRate:
-						Number(
-							((current.totalDeletions + BigInt(batchSize)) * 100n) /
-								(current.totalIdentities - BigInt(batchSize)),
-						) / 100,
+						current.totalIdentities - BigInt(batchSize) > 0n
+							? Number(
+									((current.totalDeletions + BigInt(batchSize)) * 100n) /
+										(current.totalIdentities - BigInt(batchSize)),
+								) / 100
+							: current.churnRate, // Avoid division by zero
 					gasSpentPerIdentityDeletion:
-						Number(
-							((current.gasSpent + event.transaction.gas) * 100n) /
-								current.totalDeletions +
-								BigInt(batchSize),
-						) / 100,
+						current.totalDeletions + BigInt(batchSize) > 0n
+							? Number(
+									((current.gasSpent + event.transaction.gas) * 100n) /
+										(current.totalDeletions + BigInt(batchSize)),
+								) / 100
+							: current.gasSpentPerIdentityDeletion, // Avoid division by zero
 				}),
 			});
 
