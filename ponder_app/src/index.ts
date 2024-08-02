@@ -1,30 +1,51 @@
-import {ponder} from "@/generated";
+import { ponder } from "@/generated";
 
 ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
-    const { Root, Stats } = context.db;
+	const { Root, Stats } = context.db;
 
-    if (event.args.kind === 0) {
-        // Function: registerIdentities(uint256[8] insertionProof,uint256 preRoot,uint32 startIndex,uint256[] identityCommitments,uint256 postRoot)
-        // MethodID: 0x2217b211
-        const methodID = "0x2217b211";
+	if (event.args.kind === 0) {
+		// Function: registerIdentities(uint256[8] insertionProof,uint256 preRoot,uint32 startIndex,uint256[] identityCommitments,uint256 postRoot)
+		// MethodID: 0x2217b211
+		const methodID = "0x2217b211";
 
-        if (event.transaction.input.startsWith(methodID)) {
-            const calldata = event.transaction.input.slice(10); // Remove method ID (4 bytes) and '0x' prefix
+		if (event.transaction.input.startsWith(methodID)) {
+			const calldata = event.transaction.input.slice(10); // Remove method ID (4 bytes) and '0x' prefix
 
-            const identityCommitmentsOffsetHex = calldata.slice(8 * 64 + 128, 8 * 64 + 192); // Offset for identityCommitments
-            const identityCommitmentsOffset = Number.parseInt(identityCommitmentsOffsetHex, 16) * 2; // Convert offset to integer
+			// Extract insertionProof (first 8 * 32 bytes)
+			const insertionProof = [];
+			for (let i = 0; i < 8; i++) {
+				insertionProof.push(
+					BigInt(`0x${calldata.slice(i * 64, (i + 1) * 64)}`),
+				);
+			}
 
-            const identityCommitmentsLengthHex = calldata.slice(identityCommitmentsOffset, identityCommitmentsOffset + 64);
-            const identityCommitmentsLength = Number.parseInt(identityCommitmentsLengthHex, 16);
+			const identityCommitmentsOffsetHex = calldata.slice(
+				8 * 64 + 128,
+				8 * 64 + 192,
+			); // Offset for identityCommitments
+			const identityCommitmentsOffset =
+				Number.parseInt(identityCommitmentsOffsetHex, 16) * 2; // Convert offset to integer
 
-            const identityCommitments = [];
-            for (let i = 0; i < identityCommitmentsLength; i++) {
-                const start = identityCommitmentsOffset + 64 + i * 64;
-                const end = start + 64;
-                identityCommitments.push(calldata.slice(start, end));
-            }
+			const identityCommitmentsLengthHex = calldata.slice(
+				identityCommitmentsOffset,
+				identityCommitmentsOffset + 64,
+			);
+			const identityCommitmentsLength = Number.parseInt(
+				identityCommitmentsLengthHex,
+				16,
+			);
 
-            const numIdentities = identityCommitments.length;
+			const identityCommitments = [];
+			for (let i = 0; i < identityCommitmentsLength; i++) {
+				const start = identityCommitmentsOffset + 64 + i * 64;
+				const end = start + 64;
+				const identityCommitment = BigInt(`0x${calldata.slice(start, end)}`);
+				if (identityCommitment !== 0n) {
+					identityCommitments.push(identityCommitment);
+				}
+			}
+
+			const numIdentities = identityCommitments.length;
 
 			await Stats.upsert({
 				id: "total",
@@ -32,51 +53,78 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 					numIdentitiesTotal: BigInt(numIdentities),
 				},
 				update: ({ current }) => ({
-					numIdentitiesTotal: current.numIdentitiesTotal + BigInt(numIdentities),
+					numIdentitiesTotal:
+						current.numIdentitiesTotal + BigInt(numIdentities),
 				}),
 			});
 
-            await Root.create({
-                id: String(event.args.postRoot),
-                data: {
-                    kind: "Insert",
-                    preRoot: String(event.args.preRoot),
-                    createdTx: event.transaction.hash,
-                    numIdentities: BigInt(numIdentities),
-                    timestamp: Number(event.block.timestamp),
-                    blockNumber: event.block.number,
-                },
-            });
+			await Root.create({
+				id: String(event.args.postRoot),
+				data: {
+					kind: "Insert",
+					parent: String(event.args.preRoot),
+					createdTx: event.transaction.hash,
+					numIdentities: BigInt(numIdentities),
+					proof: insertionProof,
+					commitments: identityCommitments,
+					timestamp: Number(event.block.timestamp),
+					blockNumber: event.block.number,
+				},
+			});
 
-            try {
-                await Root.update({
-                    id: String(event.args.preRoot),
-                    data: {
-                        postRoot: String(event.args.postRoot),
-                    },
-                });
-            } catch (error) {
-                console.log("Root not found");
-            }
-        }
-    } else if (event.args.kind === 1) {
-        // Function: deleteIdentities(uint256[8] deletionProof,bytes packedDeletionIndices,uint256 preRoot,uint256 postRoot)
-        // MethodID: 0xea10fbbe
-        const methodID = "0xea10fbbe";
+			try {
+				await Root.update({
+					id: String(event.args.preRoot),
+					data: {
+						child: String(event.args.postRoot),
+					},
+				});
+			} catch (error) {
+				console.log("Root not found");
+			}
+		}
+	} else if (event.args.kind === 1) {
+		// Function: deleteIdentities(uint256[8] deletionProof,bytes packedDeletionIndices,uint256 preRoot,uint256 postRoot)
+		// MethodID: 0xea10fbbe
+		const methodID = "0xea10fbbe";
 
-        if (event.transaction.input.startsWith(methodID)) {
-            const calldata = event.transaction.input.slice(10); // Remove method ID (4 bytes) and '0x' prefix
+		if (event.transaction.input.startsWith(methodID)) {
+			const calldata = event.transaction.input.slice(10); // Remove method ID (4 bytes) and '0x' prefix
 
-            const deletionProof = calldata.slice(0, 8 * 64); // 8 * 32 bytes for deletionProof
-            const packedDeletionIndicesOffsetHex = calldata.slice(8 * 64, 8 * 64 + 64); // Offset for packedDeletionIndices
-            const packedDeletionIndicesOffset = Number.parseInt(packedDeletionIndicesOffsetHex, 16) * 2; // Convert offset to integer
+			// Extract deletionProof (first 8 * 32 bytes)
+			const deletionProof = [];
+			for (let i = 0; i < 8; i++) {
+				deletionProof.push(BigInt(`0x${calldata.slice(i * 64, (i + 1) * 64)}`));
+			}
+			const packedDeletionIndicesOffsetHex = calldata.slice(
+				8 * 64,
+				8 * 64 + 64,
+			); // Offset for packedDeletionIndices
+			const packedDeletionIndicesOffset =
+				Number.parseInt(packedDeletionIndicesOffsetHex, 16) * 2; // Convert offset to integer
 
-            const packedDeletionIndicesLengthHex = calldata.slice(packedDeletionIndicesOffset, packedDeletionIndicesOffset + 64);
-            const packedDeletionIndicesLength = Number.parseInt(packedDeletionIndicesLengthHex, 16);
-            const packedDeletionIndices = calldata.slice(packedDeletionIndicesOffset + 64, packedDeletionIndicesOffset + 64 + packedDeletionIndicesLength * 2); // Extract packedDeletionIndices
+			const packedDeletionIndicesLengthHex = calldata.slice(
+				packedDeletionIndicesOffset,
+				packedDeletionIndicesOffset + 64,
+			);
+			const packedDeletionIndicesLength =
+				Number.parseInt(packedDeletionIndicesLengthHex, 16) * 2; // Adjust the length correctly for hex
 
-            // Calculate batch size
-            const batchSize = packedDeletionIndicesLength / 8; // 4 bytes per index = 8 hex chars per index
+			const packedDeletionIndices = calldata.slice(
+				packedDeletionIndicesOffset + 64,
+				packedDeletionIndicesOffset + 64 + packedDeletionIndicesLength,
+			); // Extract packedDeletionIndices
+
+			// Calculate batch size
+			const batchSize = packedDeletionIndicesLength / 8; // 4 bytes per index = 8 hex chars per index
+
+			// Convert packedDeletionIndices into an array of BigInts
+			const deletionIndices = [];
+			for (let i = 0; i < packedDeletionIndices.length; i += 8) {
+				// 8 hex chars = 32 bits (4 bytes)
+				const indexHex = packedDeletionIndices.slice(i, i + 8);
+				deletionIndices.push(BigInt(`0x${indexHex}`));
+			}
 
 			await Stats.upsert({
 				id: "total",
@@ -88,30 +136,32 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 				}),
 			});
 
-            await Root.create({
-                id: String(event.args.postRoot),
-                data: {
-                    kind: "Remove",
-                    preRoot: String(event.args.preRoot),
-                    createdTx: event.transaction.hash,
-                    numIdentities: BigInt(batchSize),
-                    timestamp: Number(event.block.timestamp),
-                    blockNumber: event.block.number,
-                },
-            });
+			await Root.create({
+				id: String(event.args.postRoot),
+				data: {
+					kind: "Remove",
+					parent: String(event.args.preRoot),
+					createdTx: event.transaction.hash,
+					numIdentities: BigInt(batchSize),
+					proof: deletionProof,
+					commitments: deletionIndices,
+					timestamp: Number(event.block.timestamp),
+					blockNumber: event.block.number,
+				},
+			});
 
-            try {
-                await Root.update({
-                    id: String(event.args.preRoot),
-                    data: {
-                        postRoot: String(event.args.postRoot),
-                    },
-                });
-            } catch (error) {
-                console.log("Root not found");
-            }
-        }
-    }
+			try {
+				await Root.update({
+					id: String(event.args.preRoot),
+					data: {
+						child: String(event.args.postRoot),
+					},
+				});
+			} catch (error) {
+				console.log("Root not found");
+			}
+		}
+	}
 });
 
 // ponder.on("WLD:Transfer", async ({ event, context }) => {
