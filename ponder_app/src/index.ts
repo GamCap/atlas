@@ -15,6 +15,7 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 	const { Root, TotalStats, DailyStats } = context.db;
 
 	const contractName = CONTRACT_MAP.get(event.log.address.toLowerCase());
+	const date = Number(event.block.timestamp) - (Number(event.block.timestamp) % 86400);
 
 	if (event.args.kind === 0) {
 		// Function: registerIdentities(uint256[8] insertionProof,uint256 preRoot,uint32 startIndex,uint256[] identityCommitments,uint256 postRoot)
@@ -103,11 +104,11 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 							: current.gasSpentPerIdentityInsertion, // Avoid division by zero
 				}),
 			});
-
+			
 			await DailyStats.upsert({
-				id: String(Number(event.block.timestamp) % 86400),
+				id: String(date),
 				create: {
-					date: Number(event.block.timestamp) % 86400,
+					date: date,
 					totalIdentities: BigInt(numIdentities),
 					totalInsertions: BigInt(numIdentities),
 					totalDeletions: BigInt(0),
@@ -263,9 +264,9 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 			});
 
 			await DailyStats.upsert({
-				id: String(Number(event.block.timestamp) % 86400),
+				id: String(date),
 				create: {
-					date: Number(event.block.timestamp) % 86400,
+					date: date,
 					totalIdentities: BigInt(-1) * BigInt(batchSize),
 					totalInsertions: BigInt(0),
 					totalDeletions: BigInt(batchSize),
