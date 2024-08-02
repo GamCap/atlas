@@ -1,8 +1,14 @@
 import { ponder } from "@/generated";
 
 const CONTRACT_MAP = new Map([
-	["0x3310846ee4250603e6aC6e4904E7E1667A1B248A".toLowerCase(), "Worldcoin: World ID Identity Manager 1"],
-	["0xf7134CE138832c1456F2a91D64621eE90c2bddEa".toLowerCase(), "Worldcoin: World ID Identity Manager 2"],
+	[
+		"0x3310846ee4250603e6aC6e4904E7E1667A1B248A".toLowerCase(),
+		"Worldcoin: World ID Identity Manager 1",
+	],
+	[
+		"0xf7134CE138832c1456F2a91D64621eE90c2bddEa".toLowerCase(),
+		"Worldcoin: World ID Identity Manager 2",
+	],
 ]);
 
 ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
@@ -64,11 +70,10 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 					avgIdentitiesPerRoot: numIdentities,
 					gasSpent: event.transaction.gas,
 					churnRate: 0.0,
-					gasSpentPerIdentityInsertion: Number(
-						(event.transaction.gas * 100n) /
-							BigInt(numIdentities),
-					) / 100,
-					gasSpentPerIdentityDeletion: 0.0
+					gasSpentPerIdentityInsertion:
+						Number((event.transaction.gas * 100n) / BigInt(numIdentities)) /
+						100,
+					gasSpentPerIdentityDeletion: 0.0,
 				},
 				update: ({ current }) => ({
 					totalIdentities: current.totalIdentities + BigInt(numIdentities),
@@ -80,14 +85,16 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 								(current.totalRoots + BigInt(1)),
 						) / 100,
 					gasSpent: current.gasSpent + event.transaction.gas,
-					churnRate: Number(
-						(current.totalDeletions * 100n) /
-							(current.totalIdentities + BigInt(numIdentities)),
-					) / 100,
-					gasSpentPerIdentityInsertion: Number(
-						((current.gasSpent + event.transaction.gas) * 100n) /
-							(current.totalInsertions + BigInt(numIdentities)),
-					) / 100,
+					churnRate:
+						Number(
+							(current.totalDeletions * 100n) /
+								(current.totalIdentities + BigInt(numIdentities)),
+						) / 100,
+					gasSpentPerIdentityInsertion:
+						Number(
+							((current.gasSpent + event.transaction.gas) * 100n) /
+								(current.totalInsertions + BigInt(numIdentities)),
+						) / 100,
 				}),
 			});
 
@@ -102,11 +109,10 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 					avgIdentitiesPerRoot: numIdentities,
 					gasSpent: event.transaction.gas,
 					churnRate: 0.0,
-					gasSpentPerIdentityInsertion: Number(
-						(event.transaction.gas * 100n) /
-							BigInt(numIdentities),
-					) / 100,
-					gasSpentPerIdentityDeletion: 0.0
+					gasSpentPerIdentityInsertion:
+						Number((event.transaction.gas * 100n) / BigInt(numIdentities)) /
+						100,
+					gasSpentPerIdentityDeletion: 0.0,
 				},
 				update: ({ current }) => ({
 					totalIdentities: current.totalIdentities + BigInt(numIdentities),
@@ -118,14 +124,18 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 								(current.totalRoots + BigInt(1)),
 						) / 100,
 					gasSpent: current.gasSpent + event.transaction.gas,
-					churnRate: Number(
-						((current.totalDeletions) * 100n) /
-							(current.totalIdentities + BigInt(numIdentities)),
-					) / 100,
-					gasSpentPerIdentityInsertion: Number(
-						((current.gasSpent + event.transaction.gas) * 100n) /
-							(current.totalInsertions + BigInt(numIdentities)),
-					) / 100,
+					churnRate:
+						Number(
+							(current.totalDeletions * 100n) /
+								(current.totalIdentities + BigInt(numIdentities)),
+						) / 100,
+					gasSpentPerIdentityInsertion:
+						numIdentities > 0
+							? Number(
+									((current.gasSpent + event.transaction.gas) * 100n) /
+										(current.totalInsertions + BigInt(numIdentities)),
+								) / 100
+							: current.gasSpentPerIdentityInsertion, // Avoid division by zero
 				}),
 			});
 
@@ -141,7 +151,7 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 					timestamp: Number(event.block.timestamp),
 					blockNumber: event.block.number,
 					contractName: contractName,
-					contractAddress: event.log.address
+					contractAddress: event.log.address,
 				},
 			});
 
@@ -210,10 +220,8 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 					gasSpent: event.transaction.gas,
 					churnRate: 0.0,
 					gasSpentPerIdentityInsertion: 0.0,
-					gasSpentPerIdentityDeletion: Number(
-						(event.transaction.gas * 100n) /
-							BigInt(batchSize),
-					) / 100,
+					gasSpentPerIdentityDeletion:
+						Number((event.transaction.gas * 100n) / BigInt(batchSize)) / 100,
 				},
 				update: ({ current }) => ({
 					totalIdentities: current.totalIdentities - BigInt(batchSize),
@@ -225,14 +233,20 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 								(current.totalRoots + BigInt(1)),
 						) / 100,
 					gasSpent: current.gasSpent + event.transaction.gas,
-					churnRate: Number(
-						((current.totalDeletions + BigInt(batchSize)) * 100n) /
-							(current.totalIdentities - BigInt(batchSize)),
-					) / 100,
-					gasSpentPerIdentityDeletion: Number(
-						((current.gasSpent + event.transaction.gas) * 100n) /
-							current.totalDeletions + BigInt(batchSize),
-					) / 100,
+					churnRate:
+						current.totalIdentities - BigInt(batchSize) > 0n
+							? Number(
+									((current.totalDeletions + BigInt(batchSize)) * 100n) /
+										(current.totalIdentities - BigInt(batchSize)),
+								) / 100
+							: current.churnRate, // Avoid division by zero
+					gasSpentPerIdentityDeletion:
+						current.totalDeletions + BigInt(batchSize) > 0n
+							? Number(
+									((current.gasSpent + event.transaction.gas) * 100n) /
+										(current.totalDeletions + BigInt(batchSize)),
+								) / 100
+							: current.gasSpentPerIdentityDeletion, // Avoid division by zero
 				}),
 			});
 
@@ -248,10 +262,8 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 					gasSpent: event.transaction.gas,
 					churnRate: 0.0,
 					gasSpentPerIdentityInsertion: 0.0,
-					gasSpentPerIdentityDeletion: Number(
-						(event.transaction.gas * 100n) /
-							BigInt(batchSize),
-					) / 100,
+					gasSpentPerIdentityDeletion:
+						Number((event.transaction.gas * 100n) / BigInt(batchSize)) / 100,
 				},
 				update: ({ current }) => ({
 					totalIdentities: current.totalIdentities - BigInt(batchSize),
@@ -263,14 +275,17 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 								(current.totalRoots + BigInt(1)),
 						) / 100,
 					gasSpent: current.gasSpent + event.transaction.gas,
-					churnRate: Number(
-						((current.totalDeletions + BigInt(batchSize)) * 100n) /
-							(current.totalIdentities - BigInt(batchSize)),
-					) / 100,
-					gasSpentPerIdentityDeletion: Number(
-						((current.gasSpent + event.transaction.gas) * 100n) /
-							current.totalDeletions + BigInt(batchSize),
-					) / 100,
+					churnRate:
+						Number(
+							((current.totalDeletions + BigInt(batchSize)) * 100n) /
+								(current.totalIdentities - BigInt(batchSize)),
+						) / 100,
+					gasSpentPerIdentityDeletion:
+						Number(
+							((current.gasSpent + event.transaction.gas) * 100n) /
+								current.totalDeletions +
+								BigInt(batchSize),
+						) / 100,
 				}),
 			});
 
@@ -286,7 +301,7 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 					timestamp: Number(event.block.timestamp),
 					blockNumber: event.block.number,
 					contractName: contractName,
-					contractAddress: event.log.address
+					contractAddress: event.log.address,
 				},
 			});
 
