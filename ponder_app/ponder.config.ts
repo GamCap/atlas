@@ -1,7 +1,5 @@
 import { createConfig, loadBalance, mergeAbis } from "@ponder/core";
 import { http, webSocket } from "viem";
-import { OptimismMintableERC20 } from "./abis/OptimismMintableERC20";
-import { WLDERC20 } from "./abis/WLDERC20";
 import { WorldIDIdentityManager1 } from "./abis/WorldIDIdentityManager1";
 import { WorldIDIdentityManager2 } from "./abis/WorldIDIdentityManager2";
 
@@ -39,7 +37,7 @@ export default createConfig({
 			network: "mainnet",
 			abi: mergeAbis([WorldIDIdentityManager1, WorldIDIdentityManager2]),
 			address: [
-				"0x316350D3EC608fFc30b01DcB7475De1C676cE910",
+				"0x3310846ee4250603e6aC6e4904E7E1667A1B248A",
 				"0xf7134CE138832c1456F2a91D64621eE90c2bddEa",
 			],
 			startBlock: 17634324,
@@ -47,22 +45,5 @@ export default createConfig({
 				event: "TreeChanged",
 			},
 		},
-		// WLD: {
-		// 	network: {
-		// 		mainnet: {
-		// 		  address: "0x163f8C2467924be0ae7B5347228CABF260318753",
-		// 		  startBlock: 17714705,
-		// 		},
-		// 		optimism: {
-		// 		  address: "0xdC6fF44d5d932Cbd77B52E5612Ba0529DC6226F1",
-		// 		  startBlock: 107087966,
-		// 		  endBlock: 110000000,
-		// 		},
-		// 	},
-		// 	abi: mergeAbis([WLDERC20, OptimismMintableERC20]),
-		// 	filter: {
-		// 		event: ["Transfer", "Approval"],
-		// 	},
-		// },
 	},
 });
