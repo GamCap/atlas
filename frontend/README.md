@@ -1,5 +1,5 @@
 
-# Atlas Frontend
+# Atlas - Worldcoin Explorer by GamCap Labs
 
 This repository contains the frontend component of the Atlas project, developed with Next.js 14 and TypeScript. The frontend is focused on visualizing and analyzing Merkle tree data for WorldCoin, providing detailed insights into identity registrations and deletions, gas usage, and other key metrics.
 

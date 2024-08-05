@@ -14,7 +14,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Atlas",
+  title: "Atlas - Worldcoin Explorer by GamCap Labs",
   description: "",
 };
 
