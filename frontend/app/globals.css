@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+@layer utilities {
+    .chart-axis > path, .chart-axis > g > line {
+        @apply dark:stroke-neutral-800 stroke-neutral-300;
+    }
+
+    .chart-axis > g > text {
+        @apply dark:text-neutral-500 text-neutral-500;
+    }
+
+    .grid-lines > .tick > line {
+        @apply dark:stroke-neutral-800 stroke-neutral-300;
+    }
+
+    /* Scroll thumb styles */
+	.scrollbar::-webkit-scrollbar {
+		width: 0.25rem;
+		height: 0.25rem;
+	}
+	.scrollbar::-webkit-scrollbar-thumb {
+		@apply bg-neutral-300 dark:bg-neutral-700 rounded-lg;
+	}
+	.scrollbar::-webkit-scrollbar-thumb:active {
+		@apply bg-transparent;
+	}
+	.scrollbar::-webkit-scrollbar-thumb:hover {
+		@apply bg-green-primary dark:bg-green-primary-dark;
+	}
+
+	/* Scroll track styles (Background) */
+	.scrollbar::-webkit-scrollbar-track {
+		@apply bg-transparent rounded;
+	}
+	.scrollbar::-webkit-scrollbar-track:hover,
+	.scrollbar::-webkit-scrollbar-track:active {
+		@apply bg-transparent;
+	}
+
+
+	
+}
+
+body {
+	--radial-menu-background: #fff;
+	--radial-menu-color: #000;
+	--radial-menu-border: #AACBD2;
+	--radial-menu-active-color: #000;
+	--radial-menu-active-background: #D8E6EA
+  }
+
+  .react-flow__node-default {
+	border: 0;
+	background-color: transparent;
+	border-radius: 0.375rem;
+	
+  }
+
+  .light .react-flow__node-default {
+	--xy-node-boxshadow-selected-default: 0 0 0 1px  #00866e;
+	  }
+
+  .dark .react-flow__node-default {
+	--xy-node-boxshadow-selected-default: 0 0 0 1px  #00866e;
+	  }
+
+
+	  .singleDataContainer {
+		@apply text-black dark:text-white text-center flex flex-col items-center gap-2
+	  }
+            .singleDataTitle{
+				@apply text-basic-16-auto-regular
+			}
+            .singleDataPoint{
+				@apply text-basic-12-auto-regular
+			}
