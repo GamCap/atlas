@@ -1,9 +1,4 @@
-[![Contributors][contributors-shield]][contributors-url]  
-[![Forks][forks-shield]][forks-url]  
-[![Stargazers][stars-shield]][stars-url]  
-[![Issues][issues-shield]][issues-url]  
-[![GNU License][license-shield]][license-url]  
-[![Twitter][twitter-shield]][twitter-url]
+[![Contributors][contributors-shield]][contributors-url]  [![Forks][forks-shield]][forks-url]  [![Stargazers][stars-shield]][stars-url]  [![Issues][issues-shield]][issues-url]  [![GNU License][license-shield]][license-url]  [![Twitter][twitter-shield]][twitter-url]
 
 # Atlas - Worldcoin Explorer by GamCap Labs
 
