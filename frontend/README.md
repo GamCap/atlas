@@ -33,12 +33,12 @@ To set up the project locally, follow these steps:
    ```
 
 3. **Environment Variables:**
-    Create a `.env` file in the root of the `frontend` directory with the following variables:
+    Copy the `.env.example` file in the root of the `frontend` directory to `.env` and fill in the following variables with your actual Supabase project details:
     ```bash
     NEXT_PUBLIC_SUPABASE_URL=<your-supabase-url>
     NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key>
     ```
-    Replace <your-supabase-url> and <your-supabase-anon-key> with your actual Supabase project details. These variables are necessary for the application to connect to the Supabase backend.
+    These variables are necessary for the application to connect to the Supabase backend.
 
 3. **Run the development server:**
    ```bash
