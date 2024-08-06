@@ -31,6 +31,90 @@ Our solution is optimal because current blockchain analytics tools lack the capa
 - **ponder.sh**
 - **Supabase**
 
+### Deployment
+
+#### Prerequisites
+
+- AWS CLI configured
+- Terraform installed
+
+#### Steps
+
+1. **Deploy Infrastructure:** Use Terraform to deploy the required infrastructure.
+    ```bash
+    cd terraform
+    terraform init
+    terraform apply
+    ```
+
+2. **Configure Ponder:** Ensure Ponder configurations are correctly set up in the Ponder repository.
+
+3. **Deploy Ponder:** Push the Ponder configurations to the configured ECR and ECS.
+
+### Important Deployment Information
+
+1. Deploy Supabase and Ponder Terraform resources using a backend config.
+2. **Critical:** Since we don’t have auto migrations on Supabase, run the following role grants using user `postgres` (credentials can be found in Secrets Manager after creating resources):
+    (See below on how to connect to the Supabase RDS database)
+    ```sql
+    GRANT USAGE ON SCHEMA ponder_data TO anon, authenticated, service_role;
+    GRANT ALL ON ALL TABLES IN SCHEMA ponder_data TO anon, authenticated, service_role;
+    GRANT ALL ON ALL ROUTINES IN SCHEMA ponder_data TO anon, authenticated, service_role;
+    GRANT ALL ON ALL SEQUENCES IN SCHEMA ponder_data TO anon, authenticated, service_role;
+    ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA ponder_data GRANT ALL ON TABLES TO anon, authenticated, service_role;
+    ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA ponder_data GRANT ALL ON ROUTINES TO anon, authenticated, service_role;
+    ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA ponder_data GRANT ALL ON SEQUENCES TO anon, authenticated, service_role;
+    ```
+
+3. From Terraform outputs (or CloudFormation outputs created by Terraform), grab the Supabase REST API URL, Supabase anon key (a JWT), and Supabase Studio URL.
+
+4. Configure any Ponder environment variable secrets (most likely RPC URLs for different chains) in Secrets Manager under `{name}_ponder_secrets` resource, and update the Ponder ECS task to ensure Ponder can use them.
+
+5. Add indexing functions and data definitions to the Ponder repository.
+
+6. Push changes and let CI/CD upload the created Ponder task image to ECR. ECS will then pick up automatically (currently ECS doesn't replace existing tasks, so manual intervention is needed).
+
+### Connecting to Supabase RDS
+
+1. Create a bastion host (a simple EC2 instance) inside the `Supabase VPC`, with a security group named `ponder`. RDS has necessary permissions to allow connections coming from that security group. Don’t forget to create or use an SSH key.
+
+2. Create an SSH tunnel:
+    ```bash
+    chmod 600 your_key.pem
+    echo "$(ssh-keyscan -p ${BASTION_PORT} ${BASTION_IP})" >> ~/.ssh/known_hosts
+    ssh -fNL ${DB_PORT}:${DATABASE_HOST}:${DB_PORT} ${BASTION_USER}@${BASTION_IP} -p ${BASTION_PORT}
+    sleep 5
+    echo "$(ssh-keyscan -p ${DB_PORT} localhost)" >> ~/.ssh/known_hosts
+    ```
+
+3. Access the database with the URL:
+    ```bash
+    postgresql://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}
+    ```
+
+### Configuration
+
+#### Supabase
+
+See "Important Deployment Information" for manual configuration needed.
+
+#### Ponder
+
+Configure the indexing parameters in the `ponder-config.ts`. Ensure the indexing functions and configuration files are properly set up to index the required onchain data.
+
+Make sure to test Ponder configuration on your local environment (it uses SQLite, so no need to host a Postgres instance).
+
+### Security
+
+- All stacks and databases are within a VPC, so public access is only possible via the Supabase REST API and a bastion host.
+- API keys, secrets, and RPC URLs are stored in Secrets Manager.
+- **IMPORTANT:** Set a password to the Amplify Supabase Studio deployment to prevent public access.
+
+### Maintenance and Monitoring
+
+- All Supabase service logs and Ponder logs are pushed into the AWS CloudWatch service.
+- Set up performance and error monitoring systems.
+
 ## Frontend
 
 This repository contains the frontend component of the Atlas project, developed with Next.js 14 and TypeScript. The frontend is focused on visualizing and analyzing Merkle tree data for WorldCoin, providing detailed insights into identity registrations and deletions, gas usage, and other key metrics.
@@ -105,90 +189,6 @@ The configuration specifies the output directory (`dist`) and disables image opt
 #### `tsconfig.json`
 
 The TypeScript configuration includes strict type-checking, module resolution, and support for JSX.
-
-## Deployment
-
-### Prerequisites
-
-- AWS CLI configured
-- Terraform installed
-
-### Steps
-
-1. **Deploy Infrastructure:** Use Terraform to deploy the required infrastructure.
-    ```bash
-    cd terraform
-    terraform init
-    terraform apply
-    ```
-
-2. **Configure Ponder:** Ensure Ponder configurations are correctly set up in the Ponder repository.
-
-3. **Deploy Ponder:** Push the Ponder configurations to the configured ECR and ECS.
-
-### Important Deployment Information
-
-1. Deploy Supabase and Ponder Terraform resources using a backend config.
-2. **Critical:** Since we don’t have auto migrations on Supabase, run the following role grants using user `postgres` (credentials can be found in Secrets Manager after creating resources):
-    (See below on how to connect to the Supabase RDS database)
-    ```sql
-    GRANT USAGE ON SCHEMA ponder_data TO anon, authenticated, service_role;
-    GRANT ALL ON ALL TABLES IN SCHEMA ponder_data TO anon, authenticated, service_role;
-    GRANT ALL ON ALL ROUTINES IN SCHEMA ponder_data TO anon, authenticated, service_role;
-    GRANT ALL ON ALL SEQUENCES IN SCHEMA ponder_data TO anon, authenticated, service_role;
-    ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA ponder_data GRANT ALL ON TABLES TO anon, authenticated, service_role;
-    ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA ponder_data GRANT ALL ON ROUTINES TO anon, authenticated, service_role;
-    ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA ponder_data GRANT ALL ON SEQUENCES TO anon, authenticated, service_role;
-    ```
-
-3. From Terraform outputs (or CloudFormation outputs created by Terraform), grab the Supabase REST API URL, Supabase anon key (a JWT), and Supabase Studio URL.
-
-4. Configure any Ponder environment variable secrets (most likely RPC URLs for different chains) in Secrets Manager under `{name}_ponder_secrets` resource, and update the Ponder ECS task to ensure Ponder can use them.
-
-5. Add indexing functions and data definitions to the Ponder repository.
-
-6. Push changes and let CI/CD upload the created Ponder task image to ECR. ECS will then pick up automatically (currently ECS doesn't replace existing tasks, so manual intervention is needed).
-
-## Connecting to Supabase RDS
-
-1. Create a bastion host (a simple EC2 instance) inside the `Supabase VPC`, with a security group named `ponder`. RDS has necessary permissions to allow connections coming from that security group. Don’t forget to create or use an SSH key.
-
-2. Create an SSH tunnel:
-    ```bash
-    chmod 600 your_key.pem
-    echo "$(ssh-keyscan -p ${BASTION_PORT} ${BASTION_IP})" >> ~/.ssh/known_hosts
-    ssh -fNL ${DB_PORT}:${DATABASE_HOST}:${DB_PORT} ${BASTION_USER}@${BASTION_IP} -p ${BASTION_PORT}
-    sleep 5
-    echo "$(ssh-keyscan -p ${DB_PORT} localhost)" >> ~/.ssh/known_hosts
-    ```
-
-3. Access the database with the URL:
-    ```bash
-    postgresql://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}
-    ```
-
-## Configuration
-
-### Supabase
-
-See "Important Deployment Information" for manual configuration needed.
-
-### Ponder
-
-Configure the indexing parameters in the `ponder-config.ts`. Ensure the indexing functions and configuration files are properly set up to index the required onchain data.
-
-Make sure to test Ponder configuration on your local environment (it uses SQLite, so no need to host a Postgres instance).
-
-## Security
-
-- All stacks and databases are within a VPC, so public access is only possible via the Supabase REST API and a bastion host.
-- API keys, secrets, and RPC URLs are stored in Secrets Manager.
-- **IMPORTANT:** Set a password to the Amplify Supabase Studio deployment to prevent public access.
-
-## Maintenance and Monitoring
-
-- All Supabase service logs and Ponder logs are pushed into the AWS CloudWatch service.
-- Set up performance and error monitoring systems.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
