@@ -44,6 +44,7 @@ export default createSchema((p) => ({
       churnRate: p.float(),
       gasSpentPerIdentityInsertion: p.float(),
       gasSpentPerIdentityDeletion: p.float(),
+	  rollingTotalIdentities: p.bigint(),
 		},
 		{
 			dateIndex: p.index("date"),

@@ -15,7 +15,19 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 	const { Root, TotalStats, DailyStats } = context.db;
 
 	const contractName = CONTRACT_MAP.get(event.log.address.toLowerCase());
-	const date = Number(event.block.timestamp) - (Number(event.block.timestamp) % 86400);
+	const date =
+		Number(event.block.timestamp) - (Number(event.block.timestamp) % 86400);
+
+	const previousDailyStats = (
+		await DailyStats.findMany({
+			where: { date: { lt: date } },
+			orderBy: { date: "desc" },
+			limit: 1,
+		})
+	).items[0];
+
+	const previousDayRollingTotalIdentities =
+		previousDailyStats?.rollingTotalIdentities ?? 0n;
 
 	if (event.args.kind === 0) {
 		// Function: registerIdentities(uint256[8] insertionProof,uint256 preRoot,uint32 startIndex,uint256[] identityCommitments,uint256 postRoot)
@@ -104,7 +116,7 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 							: current.gasSpentPerIdentityInsertion, // Avoid division by zero
 				}),
 			});
-			
+
 			await DailyStats.upsert({
 				id: String(date),
 				create: {
@@ -122,6 +134,8 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 								100
 							: 0.0,
 					gasSpentPerIdentityDeletion: 0.0,
+					rollingTotalIdentities:
+						previousDayRollingTotalIdentities + BigInt(numIdentities),
 				},
 				update: ({ current }) => ({
 					totalIdentities: current.totalIdentities + BigInt(numIdentities),
@@ -147,6 +161,10 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 										(current.totalInsertions + BigInt(numIdentities)),
 								) / 100
 							: current.gasSpentPerIdentityInsertion, // Avoid division by zero
+					rollingTotalIdentities:
+						previousDayRollingTotalIdentities +
+						current.totalIdentities +
+						BigInt(numIdentities),
 				}),
 			});
 
@@ -279,6 +297,8 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 						batchSize > 0
 							? Number((event.transaction.gas * 100n) / BigInt(batchSize)) / 100
 							: 0.0,
+					rollingTotalIdentities:
+						previousDayRollingTotalIdentities + BigInt(-1) * BigInt(batchSize),
 				},
 				update: ({ current }) => ({
 					totalIdentities: current.totalIdentities - BigInt(batchSize),
@@ -304,6 +324,10 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 										(current.totalDeletions + BigInt(batchSize)),
 								) / 100
 							: current.gasSpentPerIdentityDeletion, // Avoid division by zero
+					rollingTotalIdentities:
+						previousDayRollingTotalIdentities +
+						current.totalIdentities -
+						BigInt(batchSize),
 				}),
 			});
 
