@@ -36,6 +36,7 @@ export type Database = {
           gasSpentPerIdentityDeletion: number | null;
           gasSpentPerIdentityInsertion: number | null;
           id: string | null;
+          rollingTotalIdentities: number | null;
           totalDeletions: number | null;
           totalIdentities: number | null;
           totalInsertions: number | null;
@@ -49,6 +50,7 @@ export type Database = {
           gasSpentPerIdentityDeletion?: number | null;
           gasSpentPerIdentityInsertion?: number | null;
           id?: string | null;
+          rollingTotalIdentities?: number | null;
           totalDeletions?: number | null;
           totalIdentities?: number | null;
           totalInsertions?: number | null;
@@ -62,6 +64,7 @@ export type Database = {
           gasSpentPerIdentityDeletion?: number | null;
           gasSpentPerIdentityInsertion?: number | null;
           id?: string | null;
+          rollingTotalIdentities?: number | null;
           totalDeletions?: number | null;
           totalIdentities?: number | null;
           totalInsertions?: number | null;
@@ -401,58 +404,7 @@ export type Database = {
   };
   ponder: {
     Tables: {
-      "02c2843a27": {
-        Row: {
-          avgIdentitiesPerRoot: number | null;
-          checkpoint: string;
-          churnRate: number | null;
-          date: number | null;
-          gasSpent: number | null;
-          gasSpentPerIdentityDeletion: number | null;
-          gasSpentPerIdentityInsertion: number | null;
-          id: string;
-          operation: number;
-          operation_id: number;
-          totalDeletions: number | null;
-          totalIdentities: number | null;
-          totalInsertions: number | null;
-          totalRoots: number | null;
-        };
-        Insert: {
-          avgIdentitiesPerRoot?: number | null;
-          checkpoint: string;
-          churnRate?: number | null;
-          date?: number | null;
-          gasSpent?: number | null;
-          gasSpentPerIdentityDeletion?: number | null;
-          gasSpentPerIdentityInsertion?: number | null;
-          id: string;
-          operation: number;
-          operation_id?: number;
-          totalDeletions?: number | null;
-          totalIdentities?: number | null;
-          totalInsertions?: number | null;
-          totalRoots?: number | null;
-        };
-        Update: {
-          avgIdentitiesPerRoot?: number | null;
-          checkpoint?: string;
-          churnRate?: number | null;
-          date?: number | null;
-          gasSpent?: number | null;
-          gasSpentPerIdentityDeletion?: number | null;
-          gasSpentPerIdentityInsertion?: number | null;
-          id?: string;
-          operation?: number;
-          operation_id?: number;
-          totalDeletions?: number | null;
-          totalIdentities?: number | null;
-          totalInsertions?: number | null;
-          totalRoots?: number | null;
-        };
-        Relationships: [];
-      };
-      "5123b12363": {
+      "5e53179f63": {
         Row: {
           batchSize: number | null;
           blockNumber: number | null;
@@ -506,7 +458,61 @@ export type Database = {
         };
         Relationships: [];
       };
-      d2b40ad033: {
+      "77cf40f165": {
+        Row: {
+          avgIdentitiesPerRoot: number | null;
+          checkpoint: string;
+          churnRate: number | null;
+          date: number | null;
+          gasSpent: number | null;
+          gasSpentPerIdentityDeletion: number | null;
+          gasSpentPerIdentityInsertion: number | null;
+          id: string;
+          operation: number;
+          operation_id: number;
+          rollingTotalIdentities: number | null;
+          totalDeletions: number | null;
+          totalIdentities: number | null;
+          totalInsertions: number | null;
+          totalRoots: number | null;
+        };
+        Insert: {
+          avgIdentitiesPerRoot?: number | null;
+          checkpoint: string;
+          churnRate?: number | null;
+          date?: number | null;
+          gasSpent?: number | null;
+          gasSpentPerIdentityDeletion?: number | null;
+          gasSpentPerIdentityInsertion?: number | null;
+          id: string;
+          operation: number;
+          operation_id?: number;
+          rollingTotalIdentities?: number | null;
+          totalDeletions?: number | null;
+          totalIdentities?: number | null;
+          totalInsertions?: number | null;
+          totalRoots?: number | null;
+        };
+        Update: {
+          avgIdentitiesPerRoot?: number | null;
+          checkpoint?: string;
+          churnRate?: number | null;
+          date?: number | null;
+          gasSpent?: number | null;
+          gasSpentPerIdentityDeletion?: number | null;
+          gasSpentPerIdentityInsertion?: number | null;
+          id?: string;
+          operation?: number;
+          operation_id?: number;
+          rollingTotalIdentities?: number | null;
+          totalDeletions?: number | null;
+          totalIdentities?: number | null;
+          totalInsertions?: number | null;
+          totalRoots?: number | null;
+        };
+        Relationships: [];
+      };
+      "7a5504a78f": {
         Row: {
           avgIdentitiesPerRoot: number | null;
           checkpoint: string;
@@ -651,6 +657,7 @@ export type Database = {
           gasSpentPerIdentityDeletion: number;
           gasSpentPerIdentityInsertion: number;
           id: string;
+          rollingTotalIdentities: number;
           totalDeletions: number;
           totalIdentities: number;
           totalInsertions: number;
@@ -664,6 +671,7 @@ export type Database = {
           gasSpentPerIdentityDeletion: number;
           gasSpentPerIdentityInsertion: number;
           id: string;
+          rollingTotalIdentities: number;
           totalDeletions: number;
           totalIdentities: number;
           totalInsertions: number;
@@ -677,6 +685,7 @@ export type Database = {
           gasSpentPerIdentityDeletion?: number;
           gasSpentPerIdentityInsertion?: number;
           id?: string;
+          rollingTotalIdentities?: number;
           totalDeletions?: number;
           totalIdentities?: number;
           totalInsertions?: number;
@@ -773,15 +782,7 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      getrollingsumtotalidentities: {
-        Args: {
-          limit_rows?: number;
-        };
-        Returns: {
-          date: number;
-          rolling_sum_total_identities: number;
-        }[];
-      };
+      [_ in never]: never;
     };
     Enums: {
       [_ in never]: never;

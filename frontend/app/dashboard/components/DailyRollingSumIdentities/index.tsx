@@ -15,11 +15,17 @@ export const DailyRollingSumIdentities = () => {
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
-    const { data } = await supabase
+    let query = supabase
       .schema("ponder_data")
-      .rpc("getrollingsumtotalidentities", {
-        limit_rows: numDays !== "All" ? numDays : undefined,
-      });
+      .from("DailyStats")
+      .select("*")
+      .order("date", { ascending: false });
+
+    if (numDays !== "All") {
+      query = query.limit(numDays);
+    }
+
+    const { data } = await query;
 
     if (data) {
       const series1: Series = {
@@ -27,7 +33,7 @@ export const DailyRollingSumIdentities = () => {
         type: "line",
         data: data.reverse().map((d) => ({
           x: new Date(d.date).getTime(),
-          y: d.rolling_sum_total_identities,
+          y: d.rollingTotalIdentities,
         })),
         filled: true,
       };
