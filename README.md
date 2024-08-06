@@ -1,14 +1,14 @@
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![GNU License][license-shield]][license-url]
+[![Contributors][contributors-shield]][contributors-url]  
+[![Forks][forks-shield]][forks-url]  
+[![Stargazers][stars-shield]][stars-url]  
+[![Issues][issues-shield]][issues-url]  
+[![GNU License][license-shield]][license-url]  
 [![Twitter][twitter-shield]][twitter-url]
-
 
 # Atlas - Worldcoin Explorer by GamCap Labs
 
-Atlas is a specialized Merkle tree analytics tool for Worldcoin's Privacy-Preserving Proof-of-Personhood Protocol (PPPoPP) to enhance identity verification observability.
+Atlas is a specialized Merkle tree analytics tool for Worldcoin's Privacy-Preserving Proof-of-Personhood Protocol (PPPoPP) to enhance identity verification observability.
+
 ## Project Overview
 
 **Project Idea**
@@ -20,14 +20,16 @@ We developed an advanced analytics framework tailored to the unique usage of Mer
 Our solution is optimal because current blockchain analytics tools lack the capability to intricately analyze and visualize the complexities involved in Worldcoin's PPPoPP. These challenges have remained unaddressed primarily due to the novel application of Semaphore and the specific nuances of Worldcoin's approach to identity verification and privacy. The need for such a tool is critical now as Worldcoin expands its user base, necessitating more refined and efficient methods to analyze and manage its blockchain network.
 
 **Key Features**
+
 - **Merkle Tree:** Visualize and analyze Worldcoin's Merkle tree, including identity registrations/deletions. Freely observe how the states of the Merkle tree evolve over time.
-- **Dashboard:** Track curated metrics through various custom-built charts, including gas usage, and identity verification statistics.
+- **Dashboard:** Track curated metrics through various custom-built charts, including gas usage and identity verification statistics.
 
 ## Backend
+
 ### Technologies Used
 
 - **ponder.sh**
-- **Supabase** 
+- **Supabase**
 
 ## Frontend
 
@@ -61,24 +63,24 @@ To set up the project locally, follow these steps:
    ```
 
 3. **Environment Variables:**
-    Copy the `.env.example` file in the root of the `frontend` directory to `.env` and fill in the following variables with your actual Supabase project details:
-    ```bash
-    NEXT_PUBLIC_SUPABASE_URL=<your-supabase-url>
-    NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key>
-    ```
-    These variables are necessary for the application to connect to the Supabase backend.
+   Copy the `.env.example` file in the root of the `frontend` directory to `.env` and fill in the following variables with your actual Supabase project details:
+   ```bash
+   NEXT_PUBLIC_SUPABASE_URL=<your-supabase-url>
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key>
+   ```
+   These variables are necessary for the application to connect to the Supabase backend.
 
-3. **Run the development server:**
+4. **Run the development server:**
    ```bash
    yarn dev
    ```
 
-4. **Build the project:**
+5. **Build the project:**
    ```bash
    yarn build
    ```
 
-5. **Start the production server:**
+6. **Start the production server:**
    ```bash
    yarn start
    ```
@@ -97,26 +99,96 @@ To set up the project locally, follow these steps:
 ### Configuration
 
 #### `next.config.js`
+
 The configuration specifies the output directory (`dist`) and disables image optimization for simplicity.
 
 #### `tsconfig.json`
+
 The TypeScript configuration includes strict type-checking, module resolution, and support for JSX.
 
-### Deployment
+## Deployment
 
-Deploying the Next.js frontend is straightforward, especially with platforms that support Next.js out of the box. Here are a few options:
+### Prerequisites
 
-1. **Vercel:**
-   As the creators of Next.js, Vercel offers seamless deployment with automatic configuration. Simply connect your GitHub repository to Vercel, and it will handle the build and deployment process automatically.
+- AWS CLI configured
+- Terraform installed
 
-2. **GitHub Pages:**
-   ou can use GitHub Actions to deploy your Next.js application to GitHub Pages. There are presets and workflows available to simplify the setup.
+### Steps
 
-3. **Other Platforms:**
-   Platforms like Netlify also support Next.js. You can follow their guides for specific configurations.
+1. **Deploy Infrastructure:** Use Terraform to deploy the required infrastructure.
+    ```bash
+    cd terraform
+    terraform init
+    terraform apply
+    ```
 
-For any of these platforms, pushing your code to the connected branch will trigger the deployment process. Ensure your environment variables are correctly set up in the platform's dashboard if needed. If you need to generate static files, use the `yarn build` command. The output directory, as specified in next.config.js, is dist by default. This directory contains the static files ready for deployment.
+2. **Configure Ponder:** Ensure Ponder configurations are correctly set up in the Ponder repository.
 
+3. **Deploy Ponder:** Push the Ponder configurations to the configured ECR and ECS.
+
+### Important Deployment Information
+
+1. Deploy Supabase and Ponder Terraform resources using a backend config.
+2. **Critical:** Since we don’t have auto migrations on Supabase, run the following role grants using user `postgres` (credentials can be found in Secrets Manager after creating resources):
+    (See below on how to connect to the Supabase RDS database)
+    ```sql
+    GRANT USAGE ON SCHEMA ponder_data TO anon, authenticated, service_role;
+    GRANT ALL ON ALL TABLES IN SCHEMA ponder_data TO anon, authenticated, service_role;
+    GRANT ALL ON ALL ROUTINES IN SCHEMA ponder_data TO anon, authenticated, service_role;
+    GRANT ALL ON ALL SEQUENCES IN SCHEMA ponder_data TO anon, authenticated, service_role;
+    ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA ponder_data GRANT ALL ON TABLES TO anon, authenticated, service_role;
+    ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA ponder_data GRANT ALL ON ROUTINES TO anon, authenticated, service_role;
+    ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA ponder_data GRANT ALL ON SEQUENCES TO anon, authenticated, service_role;
+    ```
+
+3. From Terraform outputs (or CloudFormation outputs created by Terraform), grab the Supabase REST API URL, Supabase anon key (a JWT), and Supabase Studio URL.
+
+4. Configure any Ponder environment variable secrets (most likely RPC URLs for different chains) in Secrets Manager under `{name}_ponder_secrets` resource, and update the Ponder ECS task to ensure Ponder can use them.
+
+5. Add indexing functions and data definitions to the Ponder repository.
+
+6. Push changes and let CI/CD upload the created Ponder task image to ECR. ECS will then pick up automatically (currently ECS doesn't replace existing tasks, so manual intervention is needed).
+
+## Connecting to Supabase RDS
+
+1. Create a bastion host (a simple EC2 instance) inside the `Supabase VPC`, with a security group named `ponder`. RDS has necessary permissions to allow connections coming from that security group. Don’t forget to create or use an SSH key.
+
+2. Create an SSH tunnel:
+    ```bash
+    chmod 600 your_key.pem
+    echo "$(ssh-keyscan -p ${BASTION_PORT} ${BASTION_IP})" >> ~/.ssh/known_hosts
+    ssh -fNL ${DB_PORT}:${DATABASE_HOST}:${DB_PORT} ${BASTION_USER}@${BASTION_IP} -p ${BASTION_PORT}
+    sleep 5
+    echo "$(ssh-keyscan -p ${DB_PORT} localhost)" >> ~/.ssh/known_hosts
+    ```
+
+3. Access the database with the URL:
+    ```bash
+    postgresql://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}
+    ```
+
+## Configuration
+
+### Supabase
+
+See "Important Deployment Information" for manual configuration needed.
+
+### Ponder
+
+Configure the indexing parameters in the `ponder-config.ts`. Ensure the indexing functions and configuration files are properly set up to index the required onchain data.
+
+Make sure to test Ponder configuration on your local environment (it uses SQLite, so no need to host a Postgres instance).
+
+## Security
+
+- All stacks and databases are within a VPC, so public access is only possible via the Supabase REST API and a bastion host.
+- API keys, secrets, and RPC URLs are stored in Secrets Manager.
+- **IMPORTANT:** Set a password to the Amplify Supabase Studio deployment to prevent public access.
+
+## Maintenance and Monitoring
+
+- All Supabase service logs and Ponder logs are pushed into the AWS CloudWatch service.
+- Set up performance and error monitoring systems.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
@@ -133,5 +205,4 @@ For any of these platforms, pushing your code to the connected branch will trigg
 [license-url]: https://github.com/GamCap/atlas/blob/main/LICENSE
 [twitter-shield]: https://img.shields.io/badge/-Follow_@gamcaplabs-black.svg?style=for-the-badge&logo=x&colorB=555
 [twitter-url]: https://twitter.com/gamcaplabs
-```
 
