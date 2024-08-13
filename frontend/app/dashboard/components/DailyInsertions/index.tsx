@@ -83,6 +83,7 @@ export const DailyInsertions = () => {
           ]}
           onChange={handleZoomChange}
           initialIndex={1}
+          id="ga-daily-insertions-zoom"
         />
       }
     >

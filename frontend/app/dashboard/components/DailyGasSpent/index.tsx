@@ -81,6 +81,7 @@ export const DailyGasSpent = () => {
           ]}
           onChange={handleZoomChange}
           initialIndex={1}
+          id="ga-daily-gas-spent-zoom"
         />
       }
     >

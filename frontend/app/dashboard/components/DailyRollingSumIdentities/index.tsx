@@ -83,6 +83,7 @@ export const DailyRollingSumIdentities = () => {
           ]}
           onChange={handleZoomChange}
           initialIndex={1}
+          id="ga-total-identities-zoom"
         />
       }
     >

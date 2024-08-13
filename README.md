@@ -142,12 +142,13 @@ To set up the project locally, follow these steps:
    ```
 
 3. **Environment Variables:**
-   Copy the `.env.example` file in the root of the `frontend` directory to `.env` and fill in the following variables with your actual Supabase project details:
+   Copy the `.env.example` file in the root of the frontend directory to `.env` and fill in the following variables with your actual Supabase project details and Google Analytics ID:
    ```bash
    NEXT_PUBLIC_SUPABASE_URL=<your-supabase-url>
    NEXT_PUBLIC_SUPABASE_ANON_KEY=<your-supabase-anon-key>
+   NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=<your-google-analytics-id>
    ```
-   These variables are necessary for the application to connect to the Supabase backend.
+   These variables are necessary for the application to connect to the Supabase backend and for integrating Google Analytics tracking.
 
 4. **Run the development server:**
    ```bash

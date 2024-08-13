@@ -79,6 +79,7 @@ export const GrowthHeatmap = () => {
           ]}
           onChange={handleZoomChange}
           initialIndex={2}
+          id="ga-growth-heatmap-zoom"
         />
       }
     >

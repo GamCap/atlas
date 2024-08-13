@@ -11,6 +11,7 @@ const ToggleTheme = () => {
       variant="subtle"
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       className=" px-[7px] py-[7px] "
+      id="ga-toggle-theme"
     />
   );
 };

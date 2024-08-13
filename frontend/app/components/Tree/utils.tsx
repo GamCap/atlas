@@ -103,6 +103,7 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
       ref={nodeRef}
       onContextMenu={handleRightClick}
       className={`relative rounded-md text-white ${data?.kind === "Insert" ? "bg-green-primary" : data?.kind === "Remove" ? "bg-accent-red" : "bg-accent-blue"} flex flex-col items-center`}
+      id="ga-tree-node"
     >
       <Handle type="target" position={Position.Top} id="target" />
       <p className="truncate w-full p-4">{id}</p>
@@ -119,6 +120,7 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
             disabled={showCopiedLabel}
             onClick={handleCopy}
             className="whitespace-nowrap flex flex-row gap-1 items-center w-full text-left px-4 py-3 border-b border-neutral-600 hover:bg-green-primary-dark hover:text-black relative"
+            id="ga-copy-txn"
           >
             <Copy />
             <p>Copy Txn</p>
@@ -133,6 +135,7 @@ const CustomNode = (props: NodeProps<CustomNodeProps>) => {
               window.open(`https://etherscan.io/tx/${data?.createdTx}`);
             }}
             className="whitespace-nowrap flex flex-row gap-1 items-center w-full text-left px-4 py-3 hover:bg-green-primary-dark hover:text-black"
+            id="ga-explore-txn"
           >
             <Explore />
             <p>View on Etherscan</p>

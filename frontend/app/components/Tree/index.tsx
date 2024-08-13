@@ -108,16 +108,22 @@ const LayoutedFlow: React.FC<TreeProps> = ({
         <ControlButton
           onClick={() => zoomIn({ duration: 800 })}
           title="zoom in"
+          id="ga-tree-zoom-in"
         >
           +
         </ControlButton>
         <ControlButton
           onClick={() => zoomOut({ duration: 800 })}
           title="zoom out"
+          id="ga-tree-zoom-out"
         >
           -
         </ControlButton>
-        <ControlButton onClick={onLayout} title="fix layout">
+        <ControlButton
+          onClick={onLayout}
+          title="fix layout"
+          id="ga-tree-layout"
+        >
           <Layout />
         </ControlButton>
       </Controls>

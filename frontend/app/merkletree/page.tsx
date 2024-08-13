@@ -343,6 +343,7 @@ export default function Home() {
                     ? "Previous Block"
                     : "Previous Day"
                 }
+                id={`ga-previous-${controlType}`}
               >
                 <ExpandLeft className="w-6 h-6" />
               </Button>
@@ -357,6 +358,7 @@ export default function Home() {
                 size="xsmall"
                 className="whitespace-nowrap"
                 title={controlType === "blockRange" ? "Next Block" : "Next Day"}
+                id={`ga-next-${controlType}`}
               >
                 <ExpandLeft className="w-6 h-6 rotate-180" />
               </Button>
@@ -449,6 +451,7 @@ export default function Home() {
             }}
             variant="subtle"
             className="whitespace-nowrap"
+            id={`ga-apply-filters-${controlType}`}
           >
             Apply Filters
           </Button>
