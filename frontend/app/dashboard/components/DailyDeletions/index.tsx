@@ -83,6 +83,7 @@ export const DailyDeletions = () => {
           ]}
           onChange={handleZoomChange}
           initialIndex={1}
+          id="ga-daily-deletions-zoom"
         />
       }
     >

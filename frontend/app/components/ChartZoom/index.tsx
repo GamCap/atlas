@@ -10,6 +10,7 @@ export type ChartZoomProps<T> = {
   onChange: (data: T, index: number) => void;
   initialIndex?: number;
   dropdown?: boolean;
+  id?: string;
 };
 
 export const ChartZoom = <T extends { label: string }>({
@@ -20,6 +21,7 @@ export const ChartZoom = <T extends { label: string }>({
   items,
   onChange,
   dropdown = false,
+  id,
 }: ChartZoomProps<T>) => {
   const [activeIndex, setActiveIndex] = useState(initialIndex ?? 0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -65,6 +67,7 @@ export const ChartZoom = <T extends { label: string }>({
                 setActiveIndex(index);
                 setIsDropdownOpen(false);
               }}
+              id={id ? `${id}-${option.label}` : undefined}
             >
               <Text as="span">{option?.label}</Text>
             </button>
@@ -91,6 +94,7 @@ export const ChartZoom = <T extends { label: string }>({
               await onChange(item, ix);
               setActiveIndex(ix);
             }}
+            id={id ? `${id}-${label}` : undefined}
           >
             <Text
               className={`${

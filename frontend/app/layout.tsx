@@ -5,6 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,6 +32,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
+        <GoogleAnalytics
+          gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ""}
+        />
         <ThemeProvider attribute="class" defaultTheme="light">
           <div className="min-h-screen h-screen flex flex-col justify-start grow bg-gradient-to-b from-light1 to-light2 dark:from-dark1 dark:to-dark2">
             <Header links={links} />
