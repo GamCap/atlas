@@ -21,7 +21,6 @@ export default createConfig({
 					.PONDER_RPC_URLS_1!.split(",")
 					.map((url) => http(url)),
 			),
-			disableCache: true,
 		},
 		optimism: {
 			chainId: 10,
@@ -31,7 +30,6 @@ export default createConfig({
 					.PONDER_RPC_URLS_10!.split(",")
 					.map((url) => http(url)),
 			),
-			disableCache: true,
 		},
 	},
 	contracts: {
