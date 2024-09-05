@@ -7,7 +7,7 @@ export default createConfig({
 	database: {
 		kind: "postgres",
 		poolConfig: {
-			max: 300,
+			max: 200,
 		},
 		schema: "ponder_data",
 		publishSchema: "atlas",

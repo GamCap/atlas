@@ -359,4 +359,20 @@ ponder.on("WorldIDIdentityManager:TreeChanged", async ({ event, context }) => {
 			}
 		}
 	}
+
+	// If a root is older than 30 days, delete it
+	const fourteenDaysAgo = date - 14 * 86400;
+
+	// Get all roots older than 14 days
+
+	const oldRoots = (
+		await Root.findMany({
+			where: { timestamp: { lt: fourteenDaysAgo } },
+		})
+	).items;
+
+	// Delete old roots
+	for (const root of oldRoots) {
+		await Root.delete({ id: root.id });
+	}
 });

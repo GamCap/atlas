@@ -14,8 +14,8 @@ export default createSchema((p) => ({
 		commitments: p.bigint().list(),
 		timestamp: p.int(),
 		blockNumber: p.bigint(),
-    contractName: p.string().optional(),
-    contractAddress: p.hex(),
+		contractName: p.string().optional(),
+		contractAddress: p.hex(),
 	}),
 
 	TotalStats: p.createTable({
@@ -25,10 +25,10 @@ export default createSchema((p) => ({
 		totalDeletions: p.bigint(),
 		totalRoots: p.bigint(),
 		avgIdentitiesPerRoot: p.float(),
-    gasSpent: p.bigint(),
-    churnRate: p.float(),
-    gasSpentPerIdentityInsertion: p.float(),
-    gasSpentPerIdentityDeletion: p.float(),
+		gasSpent: p.bigint(),
+		churnRate: p.float(),
+		gasSpentPerIdentityInsertion: p.float(),
+		gasSpentPerIdentityDeletion: p.float(),
 	}),
 
 	DailyStats: p.createTable(
@@ -40,14 +40,14 @@ export default createSchema((p) => ({
 			totalDeletions: p.bigint(),
 			totalRoots: p.bigint(),
 			avgIdentitiesPerRoot: p.float(),
-      gasSpent: p.bigint(),
-      churnRate: p.float(),
-      gasSpentPerIdentityInsertion: p.float(),
-      gasSpentPerIdentityDeletion: p.float(),
-	  rollingTotalIdentities: p.bigint(),
+			gasSpent: p.bigint(),
+			churnRate: p.float(),
+			gasSpentPerIdentityInsertion: p.float(),
+			gasSpentPerIdentityDeletion: p.float(),
+			rollingTotalIdentities: p.bigint(),
 		},
 		{
 			dateIndex: p.index("date"),
 		},
-	)
+	),
 }));
