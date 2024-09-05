@@ -46,7 +46,7 @@ resource "aws_secretsmanager_secret" "hosted_supabase" {
 
 
 module "ponder" {
-  source = "./ponder"
+  source             = "./ponder"
   app_name           = local.app_name
   vpc_id             = module.vpc.vpc_id
   security_group_id  = aws_security_group.ponder.id
